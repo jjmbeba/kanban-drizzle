@@ -15,9 +15,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { X } from "lucide-react";
+import { Loader2, X } from "lucide-react";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import { toast } from "sonner";
+import { ResponseMessageOnly } from "@/types";
+import { currentUser } from "@clerk/nextjs";
 
-const addBoardSchema = z.object({
+export const addBoardSchema = z.object({
   name: z.string().min(2, {
     message: "Name must be at least 2 characters.",
   }),
@@ -34,8 +39,6 @@ const addBoardSchema = z.object({
     .array(),
 });
 
-type Column = z.infer<typeof addBoardSchema>["columns"][number];
-
 function useZodForm<TSchema extends z.ZodType>(
   props: Omit<UseFormProps<TSchema["_input"]>, "resolver"> & {
     schema: TSchema;
@@ -44,7 +47,6 @@ function useZodForm<TSchema extends z.ZodType>(
   const form = useForm<TSchema["_input"]>({
     ...props,
     resolver: zodResolver(props.schema, undefined, {
-      // This makes it so we can use `.transform()`s on the schema without same transform getting applied again when it reaches the server
       raw: true,
     }),
   });
@@ -55,7 +57,6 @@ function useZodForm<TSchema extends z.ZodType>(
 const AddBoardForm = () => {
   const form = useZodForm({
     schema: addBoardSchema,
-    // defaultValues: { posts },
     mode: "onChange",
   });
 
@@ -66,9 +67,23 @@ const AddBoardForm = () => {
     name: "columns",
   });
 
+  const { mutate: addBoard, isPending: addBoardPending } = useMutation({
+    mutationKey: ["boards"],
+    mutationFn: async (values: z.infer<typeof addBoardSchema>) => {
+      return await axios
+        .post("/api/boards", values)
+        .then((res) => {
+          const response: ResponseMessageOnly = res.data;
+          toast.success(response.message);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
+    },
+  });
+
   function onSubmit(values: z.infer<typeof addBoardSchema>) {
-    console.log(errors);
-    console.log(values);
+    addBoard(values);
   }
 
   return (
@@ -136,24 +151,8 @@ const AddBoardForm = () => {
         >
           + Add New Column
         </Button>
-        {/* <FormField
-          control={form.control}
-          name="columns"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Board Columns</FormLabel>
-              <FormControl>
-                <Input
-                  className="input-border"
-                  placeholder="e.g. Todo"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        /> */}
-        <Button className="w-full" type="submit">
+        <Button className="w-full" type="submit" disabled={addBoardPending}>
+          {addBoardPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
           Submit
         </Button>
       </form>

@@ -12,3 +12,8 @@ export type BoardColumn = {
   createdAt: Date | null;
   board_id: number | null;
 };
+
+export type ResponseMessageOnly = {
+  message:string;
+  error:string | null;
+}

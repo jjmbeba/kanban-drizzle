@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/providers/Providers";
+import { Toaster } from "@/components/ui/sonner";
 
 const jakarta_sans = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -23,6 +24,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className="h-[100dvh]">
         <body className={`${jakarta_sans.className} h-full`}>
+          <Toaster richColors/>
           <Providers>
             <ThemeProvider
               attribute="class"
