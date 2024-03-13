@@ -13,7 +13,7 @@ const Navbar = () => {
   return (
     <div className="flex items-center gap-4 py-4 md:py-0 px-4 bg-white dark:bg-[#2b2c37] ">
       <div className="relative h-6 w-6 md:hidden">
-        <Image src={"/logo-mobile.svg"} alt="logo" fill />
+        <Image priority src={"/logo-mobile.svg"} alt="logo" fill />
       </div>
       {/* <div
         className={`${
