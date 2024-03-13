@@ -37,9 +37,12 @@ const BoardMenu = () => {
   const { data: boards, isLoading } = useQuery({
     queryKey: ["boards"],
     queryFn: async () => {
-      return await axios
-        .get("/api/boards")
-        .then((res) => res.data)
+      return await fetch("/api/boards", {
+        next: {
+          tags: ["boards"],
+        },
+      })
+        .then((res) => res.json())
         .catch((err) => console.log(err));
     },
   });

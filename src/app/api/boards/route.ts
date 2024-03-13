@@ -1,8 +1,9 @@
 import { addBoardSchema } from "@/components/forms/AddBoardForm";
 import db from "@/db/drizzle";
-import { boards } from "@/db/schema";
+import { board_columns, boards } from "@/db/schema";
 import { auth } from "@clerk/nextjs";
-import { NextResponse } from "next/server";
+import { revalidateTag } from "next/cache";
+import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
 export async function GET(request: Request) {
@@ -19,21 +20,48 @@ export async function GET(request: Request) {
   return Response.json(data);
 }
 
-export async function POST(request: Request) {
+export async function POST(request: NextRequest) {
   const { userId } = auth();
 
+  if (!userId) {
+    return NextResponse.json(
+      {
+        message: "Unauthorized",
+      },
+      {
+        status: 401,
+      }
+    );
+  }
+
   const req: z.infer<typeof addBoardSchema> = await request.json();
-  console.log({ ...req, user_id: userId });
-
   try {
-    await db.insert(boards).values({ ...req, user_id: userId });
+    await db.transaction(async (tx) => {
+      const result = await tx
+        .insert(boards)
+        .values({ ...req, user_id: userId })
+        .returning();
 
+      if (req.columns.length > 0) {
+        const new_columns = req.columns.map((column) => {
+          return {
+            name: column.name,
+            board_id: result[0].id,
+          };
+        });
+
+        await tx.insert(board_columns).values(new_columns);
+      }
+    });
+
+    revalidateTag("boards");
+    
     const response = NextResponse.json({
       message: "Board created successfully",
     });
 
     return response;
   } catch (error) {
-    console.log(error)
+    console.log(error);
   }
 }

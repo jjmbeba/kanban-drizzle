@@ -21,6 +21,7 @@ import axios from "axios";
 import { toast } from "sonner";
 import { ResponseMessageOnly } from "@/types";
 import { currentUser } from "@clerk/nextjs";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const addBoardSchema = z.object({
   name: z.string().min(2, {
@@ -28,13 +29,9 @@ export const addBoardSchema = z.object({
   }),
   columns: z
     .object({
-      name: z
-        .string({
-          required_error: "Name is required",
-        })
-        .min(1, {
-          message: "Column name is required",
-        }),
+      name: z.string().min(1, {
+        message: "Column name is required",
+      }),
     })
     .array(),
 });
@@ -55,9 +52,15 @@ function useZodForm<TSchema extends z.ZodType>(
 }
 
 const AddBoardForm = () => {
+  const queryClient = useQueryClient();
+
   const form = useZodForm({
     schema: addBoardSchema,
     mode: "onChange",
+    defaultValues: {
+      name: "",
+      columns: [],
+    },
   });
 
   const { errors } = form.formState;
@@ -70,15 +73,26 @@ const AddBoardForm = () => {
   const { mutate: addBoard, isPending: addBoardPending } = useMutation({
     mutationKey: ["boards"],
     mutationFn: async (values: z.infer<typeof addBoardSchema>) => {
-      return await axios
-        .post("/api/boards", values)
+      return await fetch("/api/boards", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      })
+        .then((res) => res.json())
         .then((res) => {
-          const response: ResponseMessageOnly = res.data;
-          toast.success(response.message);
+          toast.success(res.message);
+          form.reset();
         })
         .catch((err) => {
           console.log(err);
         });
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["boards"],
+      });
     },
   });
 

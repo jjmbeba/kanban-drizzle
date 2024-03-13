@@ -13,8 +13,8 @@ export const boards = pgTable(
   "boards",
   {
     id: serial("id").primaryKey(),
-    user_id: text("user_id"),
-    name: text("name"),
+    user_id: text("user_id").notNull(),
+    name: text("name").notNull(),
     createdAt: timestamp("created_at").defaultNow(),
   },
   (table) => {
@@ -32,8 +32,10 @@ export const board_columns = pgTable(
   "board_columns",
   {
     id: serial("id").primaryKey(),
-    board_id: integer("board_id").references(() => boards.id),
-    name: text("name"),
+    board_id: integer("board_id").references(() => boards.id, {
+      onDelete:'cascade'
+    }).notNull(),
+    name: text("name").notNull(),
     createdAt: timestamp("created_at").defaultNow(),
   },
   (table) => {
@@ -54,8 +56,8 @@ export const tasks = pgTable(
   "tasks",
   {
     id: serial("id").primaryKey(),
-    column_id: integer("column_id").references(() => board_columns.id),
-    title: text("title"),
+    column_id: integer("column_id").references(() => board_columns.id).notNull(),
+    title: text("title").notNull(),
     createdAt: timestamp("created_at").defaultNow(),
   },
   (table) => {
@@ -69,8 +71,8 @@ export const sub_tasks = pgTable(
   "sub_tasks",
   {
     id: serial("id").primaryKey(),
-    task_id: integer("task_id").references(() => tasks.id),
-    name: text("name"),
+    task_id: integer("task_id").references(() => tasks.id).notNull(),
+    name: text("name").notNull(),
     createdAt: timestamp("created_at").defaultNow(),
   },
   (table) => {
