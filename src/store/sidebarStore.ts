@@ -1,4 +1,4 @@
-import { Board } from "@/components/BoardMenu";
+import { Board } from "@/components/types";
 import { create } from "zustand";
 
 type State = {

@@ -48,7 +48,7 @@ const BoardMenu = () => {
     if (!isLoading && boards?.[0]) {
       setActiveBoard(boards[0]);
     }
-  }, [boards, isLoading]);
+  }, [boards, isLoading, setActiveBoard]);
 
   if (isLoading) {
     return (
