@@ -17,22 +17,10 @@ const Sidebar = () => {
       state.setActiveBoard,
     ]);
 
+
+
   // const { data: boards, isLoading } = trpc.getBoards.useQuery();
   // const { user } = useUser();
-
-  // const { data: boards, isLoading } = useQuery({
-  //   queryKey: ["boards"],
-  //   queryFn: async () => {
-  //     if (!user) return;
-
-  //     return await db.query.boards.findMany({
-  //       where: (boards, { eq }) => eq(boards.user_id, user.id),
-  //       with: {
-  //         board_columns: true,
-  //       },
-  //     });
-  //   },
-  // });
 
   // useEffect(() => {
   //   if (!isLoading && boards?.[0]) {

@@ -21,7 +21,8 @@ import { useSidebarStore } from "@/store/sidebarStore";
 import AddBoard from "./AddBoard";
 import { useUser } from "@clerk/nextjs";
 import { useQuery } from "@tanstack/react-query";
-
+import axios from "axios";
+import { Board } from "./types";
 
 const BoardMenu = () => {
   const [open, setOpen] = useState(false);
@@ -31,37 +32,34 @@ const BoardMenu = () => {
     state.setActiveBoard,
   ]);
 
-  // const { user } = useUser();
+  const { user } = useUser();
 
-  // const { data } = useQuery({
-  //   queryKey: ["boards"],
-  //   queryFn: () => {
-  //     if (!user) return;
-  //     getBoards();
-  //   },
-  // });
+  const { data:boards, isLoading } = useQuery({
+    queryKey: ["boards"],
+    queryFn: async () => {
+      return await axios
+        .get("/api/boards")
+        .then((res) => res.data)
+        .catch((err) => console.log(err));
+    },
+  });
 
-  // console.log(data);
+  useEffect(() => {
+    if (!isLoading && boards?.[0]) {
+      setActiveBoard(boards[0]);
+    }
+  }, [boards, isLoading]);
 
-  // useEffect(() => {
-  //   if (error) {
-  //     console.log(error);
-  //   }
-  //   if (!isLoading && boards?.[0]) {
-  //     setActiveBoard(boards[0]);
-  //   }
-  // }, [boards, isLoading, error]);
-
-  // if (isLoading) {
-  //   return (
-  //     <div className="flex items-center">
-  //       <Loader2 className="mr-2 h-6 w-6 animate-spin" />
-  //       Loading boards
-  //     </div>
-  //   );
-  // } else if (!boards) {
-  //   return <div className="">Add new board</div>;
-  // }
+  if (isLoading) {
+    return (
+      <div className="flex items-center">
+        <Loader2 className="mr-2 h-6 w-6 animate-spin" />
+        Loading boards
+      </div>
+    );
+  } else if (!boards) {
+    return <div className="">Add new board</div>;
+  }
 
   return (
     <>
@@ -82,10 +80,10 @@ const BoardMenu = () => {
         <DialogContent className="max-w-[17.5rem] rounded p-0 py-[1.1875rem] bg-white dark:bg-[#2b2c37] border-none">
           <DialogHeader>
             <DialogTitle className="pl-[1.1875rem] text-left text-[#828FA3] uppercase heading-sm">
-              All boards (0)
+              All boards ({boards.length})
             </DialogTitle>
             <DialogDescription className="pt-[1.375rem] flex flex-col items-start text-[0.9375rem] leading-[1.1875rem] font-bold">
-              {/* {boards.map((board) => (
+              {boards.map((board:Board) => (
                 <div
                   key={board.id}
                   onClick={() => setActiveBoard(board)}
@@ -117,7 +115,7 @@ const BoardMenu = () => {
 
                   {board.name}
                 </div>
-              ))} */}
+              ))}
               <AddBoard />
               <div className="ml-[1.1875rem]">
                 <ThemeToggle />

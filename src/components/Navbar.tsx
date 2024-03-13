@@ -15,7 +15,7 @@ const Navbar = () => {
       <div className="relative h-6 w-6 md:hidden">
         <Image priority src={"/logo-mobile.svg"} alt="logo" fill />
       </div>
-      {/* <div
+      <div
         className={`${
           !showSidebar ? "pr-[1.5625rem] " : "pr-[5.65rem]"
         } md:py-[1.4375rem] hidden md:block border-r border-r-[#e4ebfa] dark:border-r-[#3e3f4e] transition-all duration-300`}
@@ -28,7 +28,7 @@ const Navbar = () => {
             fill
           />
         </div>
-      </div> */}
+      </div>
       <NavbarActions />
     </div>
   );
