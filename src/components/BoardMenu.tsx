@@ -27,10 +27,13 @@ import { Board } from "../types";
 const BoardMenu = () => {
   const [open, setOpen] = useState(false);
 
-  const [activeBoard, setActiveBoard] = useSidebarStore((state) => [
-    state.activeBoard,
-    state.setActiveBoard,
-  ]);
+  const [activeBoard, setActiveBoard, openNavbarMenu, setOpenNavbarMenu] =
+    useSidebarStore((state) => [
+      state.activeBoard,
+      state.setActiveBoard,
+      state.openNavbarMenu,
+      state.setOpenNavbarMenu,
+    ]);
 
   const { user } = useUser();
 
@@ -69,7 +72,7 @@ const BoardMenu = () => {
       <h2 className="hidden text-lg font-bold md:flex items-center">
         {activeBoard?.name}
       </h2>
-      <Dialog open={open} onOpenChange={setOpen}>
+      <Dialog open={openNavbarMenu} onOpenChange={setOpenNavbarMenu}>
         <DialogTrigger className="md:hidden">
           <h2 className="text-lg font-bold flex items-center">
             {activeBoard?.name}

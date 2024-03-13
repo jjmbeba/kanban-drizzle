@@ -22,6 +22,7 @@ import { toast } from "sonner";
 import { ResponseMessageOnly } from "@/types";
 import { currentUser } from "@clerk/nextjs";
 import { useQueryClient } from "@tanstack/react-query";
+import { useSidebarStore } from "@/store/sidebarStore";
 
 export const addBoardSchema = z.object({
   name: z.string().min(2, {
@@ -53,6 +54,11 @@ function useZodForm<TSchema extends z.ZodType>(
 
 const AddBoardForm = () => {
   const queryClient = useQueryClient();
+
+  const [openNavbarMenu, setOpenNavbarMenu] = useSidebarStore((state) => [
+    state.openNavbarMenu,
+    state.setOpenNavbarMenu,
+  ]);
 
   const form = useZodForm({
     schema: addBoardSchema,
@@ -93,6 +99,7 @@ const AddBoardForm = () => {
       queryClient.invalidateQueries({
         queryKey: ["boards"],
       });
+      setOpenNavbarMenu(false);
     },
   });
 

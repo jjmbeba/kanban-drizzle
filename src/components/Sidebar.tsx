@@ -112,7 +112,7 @@ const Sidebar = () => {
             </div>
           ))}
           <div
-            className={`py-[1.125rem] pl-[1.1875rem] pr-[4.375rem] flex items-center gap-[0.8125rem] rounded-r-[6.25rem] text-primary`}
+            className={`py-[1.125rem] pl-[1.1875rem] flex items-center gap-[0.8125rem] rounded-r-[6.25rem] text-primary`}
           >
             <svg
               width="16"
