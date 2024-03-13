@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useFieldArray, useForm } from "react-hook-form";
+import { UseFormProps, useFieldArray, useForm } from "react-hook-form";
 import { z } from "zod";
 import React from "react";
 import { Button } from "@/components/ui/button";
@@ -23,25 +23,43 @@ const addBoardSchema = z.object({
   }),
   columns: z
     .object({
-      name: z.string().min(1, {
-        message: "Column name is required",
-      }),
+      name: z
+        .string({
+          required_error: "Name is required",
+        })
+        .min(1, {
+          message: "Column name is required",
+        }),
     })
     .array(),
 });
 
-const AddBoardForm = () => {
-  const form = useForm<z.infer<typeof addBoardSchema>>({
-    resolver: zodResolver(addBoardSchema),
-    defaultValues: {
-      name: "",
-      columns: [
-        {
-          name: "",
-        },
-      ],
-    },
+type Column = z.infer<typeof addBoardSchema>["columns"][number];
+
+function useZodForm<TSchema extends z.ZodType>(
+  props: Omit<UseFormProps<TSchema["_input"]>, "resolver"> & {
+    schema: TSchema;
+  }
+) {
+  const form = useForm<TSchema["_input"]>({
+    ...props,
+    resolver: zodResolver(props.schema, undefined, {
+      // This makes it so we can use `.transform()`s on the schema without same transform getting applied again when it reaches the server
+      raw: true,
+    }),
   });
+
+  return form;
+}
+
+const AddBoardForm = () => {
+  const form = useZodForm({
+    schema: addBoardSchema,
+    // defaultValues: { posts },
+    mode: "onChange",
+  });
+
+  const { errors } = form.formState;
 
   const { fields, append, remove } = useFieldArray({
     control: form.control,
@@ -49,6 +67,7 @@ const AddBoardForm = () => {
   });
 
   function onSubmit(values: z.infer<typeof addBoardSchema>) {
+    console.log(errors);
     console.log(values);
   }
 
@@ -76,6 +95,8 @@ const AddBoardForm = () => {
           )}
         />
         {fields.map((field, index) => {
+          const errorForField = errors?.columns?.[index]?.name;
+
           return (
             <FormItem key={field.id}>
               <FormLabel>Board Columns</FormLabel>
@@ -96,6 +117,9 @@ const AddBoardForm = () => {
                   </Button>
                 </div>
               </FormControl>
+              <p className="text-sm font-medium text-destructive">
+                {errorForField?.message ?? <>&nbsp;</>}
+              </p>
               <FormMessage />
             </FormItem>
           );
