@@ -21,8 +21,8 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <body className={`${jakarta_sans.className}`}>
+      <html lang="en" className="h-[100dvh]">
+        <body className={`${jakarta_sans.className} h-full`}>
           <Providers>
             <ThemeProvider
               attribute="class"
@@ -31,7 +31,7 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               <Navbar />
-              <div className="flex">
+              <div className="flex h-[calc(100%-4.4511875rem)]">
                 <Sidebar />
                 {children}
               </div>

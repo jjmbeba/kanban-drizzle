@@ -7,6 +7,8 @@ import { Eye, EyeOff, Loader2 } from "lucide-react";
 import ThemeToggle from "./ThemeToggle";
 import { useQuery } from "@tanstack/react-query";
 import { useUser } from "@clerk/nextjs";
+import axios from "axios";
+import { Board } from "@/types";
 
 const Sidebar = () => {
   const [showSidebar, setShowSidebar, activeBoard, setActiveBoard] =
@@ -17,36 +19,43 @@ const Sidebar = () => {
       state.setActiveBoard,
     ]);
 
+  const { data: boards, isLoading } = useQuery({
+    queryKey: ["boards"],
+    queryFn: async () => {
+      return await axios
+        .get("/api/boards")
+        .then((res) => res.data)
+        .catch((err) => console.log(err));
+    },
+  });
 
+  const { user } = useUser();
 
-  // const { data: boards, isLoading } = trpc.getBoards.useQuery();
-  // const { user } = useUser();
+  useEffect(() => {
+    if (!isLoading && boards?.[0]) {
+      //  setActiveBoard(boards[0]);
+    }
+  }, [boards, isLoading]);
 
-  // useEffect(() => {
-  //   if (!isLoading && boards?.[0]) {
-  //     //  setActiveBoard(boards[0]);
-  //   }
-  // }, [boards, isLoading]);
-
-  // if (isLoading) {
-  //   return (
-  //     <div className="flex items-center">
-  //       <Loader2 className="mr-2 h-6 w-6 animate-spin" />
-  //       Loading boards
-  //     </div>
-  //   );
-  // } else if (!boards) {
-  //   return <div className="">Add new board</div>;
-  // }
+  if (isLoading) {
+    return (
+      <div className="flex items-center">
+        <Loader2 className="mr-2 h-6 w-6 animate-spin" />
+        Loading boards
+      </div>
+    );
+  } else if (!boards) {
+    return <div className="">Add new board</div>;
+  }
 
   return (
     <div
-      className={`transition-all duration-150 ${
+      className={` transition-all duration-150 ${
         !showSidebar ? "translate-x-[-16.25rem]" : "translate-x-0"
       }`}
     >
-      <div className="bg-white dark:bg-[#2b2c37]  pt-[1.875rem] max-w-[16.25rem] hidden md:block border-r border-r-[#e4ebfa] dark:border-r-[#3e3f4e] pb-[3.125rem] relative">
-        <div className="absolute bottom-[2.0625rem] -right-[2.5rem] hidden md:block">
+      <div className="h-full bg-white dark:bg-[#2b2c37]  pt-[1.875rem] pb-10 max-w-[16.25rem] hidden md:block border-r border-r-[#e4ebfa] dark:border-r-[#3e3f4e]">
+        <div className="absolute bottom-[2.0625rem] lg:bottom-4 -right-[2.5rem] hidden md:block">
           <Button
             size={"icon"}
             className="rounded-l-none flex items-center justify-center"
@@ -56,10 +65,10 @@ const Sidebar = () => {
           </Button>
         </div>
         <div className="pl-[1.1875rem] text-left text-[#828FA3] uppercase text-[0.75rem] tracking-[0.15rem]">
-          All boards ()
+          All boards ({boards.length})
         </div>
         <div className="pt-[1.375rem] flex flex-col items-start text-[0.9375rem] leading-[1.1875rem] font-bold">
-          {/* {boards.map((board) => (
+          {boards.map((board: Board) => (
             <div
               key={board.id}
               onClick={() => setActiveBoard(board)}
@@ -67,7 +76,7 @@ const Sidebar = () => {
                 board.id === activeBoard?.id
                   ? "bg-primary text-primary-foreground"
                   : "text-[#828FA3]"
-              } py-[1.125rem] pl-[1.1875rem] pr-[4.375rem] flex items-center gap-[0.8125rem] rounded-r-[6.25rem]`}
+              } py-[1.125rem] pl-[1.1875rem] pr-[4.375rem] cursor-pointer flex items-center gap-[0.8125rem] rounded-r-[6.25rem]`}
             >
               <svg
                 width="16"
@@ -91,7 +100,7 @@ const Sidebar = () => {
 
               {board.name}
             </div>
-          ))} */}
+          ))}
           <div
             className={`py-[1.125rem] pl-[1.1875rem] pr-[4.375rem] flex items-center gap-[0.8125rem] rounded-r-[6.25rem] text-primary`}
           >

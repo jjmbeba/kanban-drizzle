@@ -22,7 +22,7 @@ import AddBoard from "./AddBoard";
 import { useUser } from "@clerk/nextjs";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import { Board } from "./types";
+import { Board } from "../types";
 
 const BoardMenu = () => {
   const [open, setOpen] = useState(false);
@@ -34,7 +34,7 @@ const BoardMenu = () => {
 
   const { user } = useUser();
 
-  const { data:boards, isLoading } = useQuery({
+  const { data: boards, isLoading } = useQuery({
     queryKey: ["boards"],
     queryFn: async () => {
       return await axios
@@ -83,7 +83,7 @@ const BoardMenu = () => {
               All boards ({boards.length})
             </DialogTitle>
             <DialogDescription className="pt-[1.375rem] flex flex-col items-start text-[0.9375rem] leading-[1.1875rem] font-bold">
-              {boards.map((board:Board) => (
+              {boards.map((board: Board) => (
                 <div
                   key={board.id}
                   onClick={() => setActiveBoard(board)}
