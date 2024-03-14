@@ -15,7 +15,7 @@ const AddBoard = () => {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger
-        className={`py-[1.125rem] pl-[1.1875rem] pr-[4.375rem] flex items-center gap-[0.8125rem] rounded-r-[6.25rem] text-primary`}
+        className={`py-[1.125rem] pl-[1.1875rem] flex items-center gap-[0.8125rem] rounded-r-[6.25rem] text-primary`}
         onClick={() => {
           setOpen(true);
         }}
@@ -37,7 +37,7 @@ const AddBoard = () => {
         </svg>
         + Create New Board
       </DialogTrigger>
-      <DialogContent className="max-w-[17.5rem] rounded px-6 py-[1.1875rem] bg-white dark:bg-[#2b2c37] border-none">
+      <DialogContent className="max-w-[17.5rem] md:p-[2.125rem] md:max-w-[30rem] rounded md:rounded-[0.375rem] px-6 py-[1.1875rem] bg-white dark:bg-[#2b2c37] border-none">
         <DialogHeader>
           <DialogTitle className="text-left heading-lg">
             Add New Board
