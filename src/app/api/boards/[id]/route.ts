@@ -14,15 +14,18 @@ export async function DELETE(
 
   const boardId = params.id;
 
-  if(!boardId)throw new Error("NOT FOUND");
+  if (!boardId) throw new Error("NOT FOUND");
 
   try {
-    await db
+    const deletedBoardName: { deletedBoardName: string }[] = await db
       .delete(boards)
-      .where(and(eq(boards.id, parseInt(boardId)), eq(boards.user_id, userId)));
+      .where(and(eq(boards.id, parseInt(boardId)), eq(boards.user_id, userId)))
+      .returning({
+        deletedBoardName: boards.name,
+      });
 
     return NextResponse.json({
-      message: "Board deleted successfully",
+      message: `${deletedBoardName[0].deletedBoardName} deleted successfully`,
     });
   } catch (error) {
     return NextResponse.json(

@@ -24,9 +24,7 @@ const EditBoardForm = () => {
   const queryClient = useQueryClient();
   const [activeBoard] = useSidebarStore((state) => [state.activeBoard]);
 
-  if (!activeBoard) return;
-
-  const board_columns = activeBoard.board_columns.map(({ name }) => {
+  const board_columns = activeBoard?.board_columns.map(({ name }) => {
    if(name){
      return {
        name,
@@ -38,8 +36,8 @@ const EditBoardForm = () => {
     schema: addBoardSchema,
     mode: "onChange",
     defaultValues: {
-      name: activeBoard.name!,
-      columns: [...board_columns]!,
+      name: activeBoard?.name!,
+      columns: board_columns!,
     },
   });
 
