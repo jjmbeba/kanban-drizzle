@@ -7,7 +7,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useSidebarStore } from "@/store/sidebarStore";
@@ -18,49 +18,28 @@ import { Loader2, X } from "lucide-react";
 import { UseFormProps, useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { addBoardSchema, useZodForm } from "./AddBoardForm";
 
-export const addBoardSchema = z.object({
-  name: z.string().min(2, {
-    message: "Name must be at least 2 characters.",
-  }),
-  columns: z
-    .object({
-      name: z.string().min(1, {
-        message: "Column name is required",
-      }),
-    })
-    .array(),
-});
-
-export function useZodForm<TSchema extends z.ZodType>(
-  props: Omit<UseFormProps<TSchema["_input"]>, "resolver"> & {
-    schema: TSchema;
-  }
-) {
-  const form = useForm<TSchema["_input"]>({
-    ...props,
-    resolver: zodResolver(props.schema, undefined, {
-      raw: true,
-    }),
-  });
-
-  return form;
-}
-
-const AddBoardForm = () => {
+const EditBoardForm = () => {
   const queryClient = useQueryClient();
+  const [activeBoard] = useSidebarStore((state) => [state.activeBoard]);
 
-  const [openNavbarMenu, setOpenNavbarMenu] = useSidebarStore((state) => [
-    state.openNavbarMenu,
-    state.setOpenNavbarMenu,
-  ]);
+  if (!activeBoard) return;
+
+  const board_columns = activeBoard.board_columns.map(({ name }) => {
+   if(name){
+     return {
+       name,
+     };
+   }
+  });
 
   const form = useZodForm({
     schema: addBoardSchema,
     mode: "onChange",
     defaultValues: {
-      name: "",
-      columns: [],
+      name: activeBoard.name!,
+      columns: [...board_columns]!,
     },
   });
 
@@ -71,29 +50,8 @@ const AddBoardForm = () => {
     name: "columns",
   });
 
-  const { mutate: addBoard, isPending: addBoardPending } = useMutation({
-    mutationKey: ["boards"],
-    mutationFn: async (values: z.infer<typeof addBoardSchema>) => {
-      return await axios
-        .post("/api/boards", values)
-        .then((res) => {
-          toast.success(res.data.message);
-          form.reset();
-        })
-        .catch((err) => {
-          console.log(err);
-        });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({
-        queryKey: ["boards"],
-      });
-      setOpenNavbarMenu(false);
-    },
-  });
-
   function onSubmit(values: z.infer<typeof addBoardSchema>) {
-    addBoard(values);
+    console.log(values);
   }
 
   return (
@@ -161,8 +119,8 @@ const AddBoardForm = () => {
         >
           + Add New Column
         </Button>
-        <Button className="w-full" type="submit" disabled={addBoardPending}>
-          {addBoardPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
+        <Button className="w-full" type="submit">
+          {/* {addBoardPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />} */}
           Submit
         </Button>
       </form>
@@ -170,4 +128,4 @@ const AddBoardForm = () => {
   );
 };
 
-export default AddBoardForm;
+export default EditBoardForm;

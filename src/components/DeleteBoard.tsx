@@ -44,7 +44,7 @@ const DeleteBoard = ({ setOpen }: Props) => {
   });
 
   return (
-    <DialogContent className="max-w-[21.4375rem] md:max-w-[30rem] rounded md:rounded-[0.375rem] border-none ">
+    <>
       <DialogHeader>
         <DialogTitle className="text-left text-destructive">
           Delete this board?
@@ -67,7 +67,7 @@ const DeleteBoard = ({ setOpen }: Props) => {
           Cancel
         </Button>
       </div>
-    </DialogContent>
+    </>
   );
 };
 
