@@ -1,13 +1,6 @@
 "use client";
 
 import {
-  ChevronDown,
-  LayoutDashboard,
-  Loader2,
-  MoreHorizontal,
-} from "lucide-react";
-import React, { useEffect, useState } from "react";
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -15,14 +8,17 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import Image from "next/image";
-import ThemeToggle from "./ThemeToggle";
 import { useSidebarStore } from "@/store/sidebarStore";
-import AddBoard from "./AddBoard";
-import { useUser } from "@clerk/nextjs";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import {
+  ChevronDown,
+  Loader2
+} from "lucide-react";
+import { useEffect, useState } from "react";
 import { Board } from "../types";
+import AddBoard from "./AddBoard";
+import ThemeToggle from "./ThemeToggle";
 
 const BoardMenu = () => {
   const [open, setOpen] = useState(false);

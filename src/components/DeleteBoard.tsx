@@ -44,7 +44,7 @@ const DeleteBoard = ({ setOpen }: Props) => {
   });
 
   return (
-    <DialogContent className="max-w-[21.4375rem] rounded">
+    <DialogContent className="max-w-[21.4375rem] md:max-w-[30rem] rounded md:rounded-[0.375rem] border-none ">
       <DialogHeader>
         <DialogTitle className="text-left text-destructive">
           Delete this board?
@@ -54,17 +54,19 @@ const DeleteBoard = ({ setOpen }: Props) => {
           action will remove all columns and tasks and cannot be reversed.
         </DialogDescription>
       </DialogHeader>
-      <Button
-        variant={"destructive"}
-        disabled={deletePending}
-        onClick={() => deleteBoard()}
-      >
-        {deletePending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-        Delete
-      </Button>
-      <Button onClick={() => setOpen(false)} variant={"secondary"}>
-        Cancel
-      </Button>
+      <div className="w-full flex flex-col md:flex-row md:items-center md:*:w-1/2  gap-4">
+        <Button
+          variant={"destructive"}
+          disabled={deletePending}
+          onClick={() => deleteBoard()}
+        >
+          {deletePending && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          Delete
+        </Button>
+        <Button onClick={() => setOpen(false)} variant={"secondary"}>
+          Cancel
+        </Button>
+      </div>
     </DialogContent>
   );
 };
