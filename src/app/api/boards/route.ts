@@ -54,8 +54,6 @@ export async function POST(request: NextRequest) {
       }
     });
 
-    revalidateTag("boards");
-    
     const response = NextResponse.json({
       message: "Board created successfully",
     });

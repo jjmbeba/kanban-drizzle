@@ -79,16 +79,10 @@ const AddBoardForm = () => {
   const { mutate: addBoard, isPending: addBoardPending } = useMutation({
     mutationKey: ["boards"],
     mutationFn: async (values: z.infer<typeof addBoardSchema>) => {
-      return await fetch("/api/boards", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      })
-        .then((res) => res.json())
+      return await axios
+        .post("/api/boards", values)
         .then((res) => {
-          toast.success(res.message);
+          toast.success(res.data.message);
           form.reset();
         })
         .catch((err) => {
