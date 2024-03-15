@@ -13,8 +13,8 @@ const TaskDisplaySkeleton = () => {
     <div>
       <ScrollArea className="w-96 whitespace-nowrap">
         <div className="flex w-max space-x-[1.4375rem] mx-4 my-6">
-          {new Array(3).fill(0).map((_) => (
-            <div>
+          {new Array(3).fill(0).map((_, index) => (
+            <div key={index}>
               <div>
                 <div className="flex items-center gap-[0.625rem]">
                   <Skeleton className="w-[0.9375rem] h-[0.9375rem] rounded-full" />
