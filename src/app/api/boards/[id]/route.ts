@@ -33,32 +33,50 @@ export async function PATCH(
         )
         .returning();
 
-        const columns = await Promise.all(
-          req.columns?.map(async ({ id, name }) => {
-            if (id) {
-              const updatedColumn = await tx
-                .update(board_columns)
-                .set({
-                  name,
-                })
-                .where(eq(board_columns.id, id))
-                .returning();
+      // Fetch existing columns for the board
+      const existingColumns = await tx
+        .select()
+        .from(board_columns)
+        .where(eq(board_columns.board_id,  updatedBoard[0].id ));
 
-              return updatedColumn[0];
-            } else {
-              const new_board_column = await tx
-                .insert(board_columns)
-                .values({
-                  name: name,
-                  board_id: updatedBoard[0].id,
-                })
-                .returning();
-              return new_board_column[0];
-            }
-          })
-        );
-      
-      return {...updatedBoard[0], board_columns:columns};
+      // Delete columns that are not present in the request
+      const deletePromises = existingColumns
+        .filter(
+          (column) =>
+            !req.columns.find((reqColumn) => reqColumn.id === column.id)
+        )
+        .map(async (column) => {
+          await tx.delete(board_columns).where(eq(board_columns.id , column.id ));
+        });
+
+      await Promise.all(deletePromises);
+
+      const columns = await Promise.all(
+        req.columns?.map(async ({ id, name }) => {
+          if (id) {
+            const updatedColumn = await tx
+              .update(board_columns)
+              .set({
+                name,
+              })
+              .where(eq(board_columns.id, id))
+              .returning();
+
+            return updatedColumn[0];
+          } else {
+            const new_board_column = await tx
+              .insert(board_columns)
+              .values({
+                name: name,
+                board_id: updatedBoard[0].id,
+              })
+              .returning();
+            return new_board_column[0];
+          }
+        })
+      );
+
+      return { ...updatedBoard[0], board_columns: columns };
     });
 
     return NextResponse.json({

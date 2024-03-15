@@ -16,6 +16,7 @@ import { useEffect, useState } from "react";
 import { Board } from "../types";
 import AddBoard from "./AddBoard";
 import ThemeToggle from "./ThemeToggle";
+import { Skeleton } from "./ui/skeleton";
 
 const BoardMenu = () => {
   const [open, setOpen] = useState(false);
@@ -52,12 +53,7 @@ const BoardMenu = () => {
   }, [boards, isLoading, setActiveBoard, activeBoard]);
 
   if (isLoading) {
-    return (
-      <div className="flex items-center">
-        <Loader2 className="mr-2 h-6 w-6 animate-spin" />
-        Loading boards
-      </div>
-    );
+    return <Skeleton className="w-40 h-6 rounded-[0.3rem]" />;
   } else if (!boards) {
     return <div className="">Add new board</div>;
   }
