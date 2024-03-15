@@ -43,9 +43,16 @@ const Sidebar = () => {
 
   useEffect(() => {
     if (!isLoading && boards?.[0]) {
-      setActiveBoard(boards[0]);
+      if (activeBoard) {
+        const board = boards.find(
+          (board: Board) => activeBoard.id === board.id
+        );
+        setActiveBoard(board);
+      } else {
+        setActiveBoard(boards[0]);
+      }
     }
-  }, [boards, isLoading]);
+  }, [boards, isLoading, setActiveBoard, activeBoard]);
 
   if (isLoading && showSidebar) {
     return (

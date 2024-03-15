@@ -3,7 +3,7 @@
 import {
   DialogDescription,
   DialogHeader,
-  DialogTitle
+  DialogTitle,
 } from "@/components/ui/dialog";
 import { Dispatch, SetStateAction } from "react";
 import EditBoardForm from "./forms/EditBoardForm";
@@ -16,7 +16,7 @@ const EditBoard = ({ setOpen }: Props) => {
   return (
     <DialogHeader>
       <DialogTitle className="text-left">Edit board</DialogTitle>
-      <DialogDescription className="text-left py-[1.875rem]">
+      <DialogDescription className="text-left pb-[1.875rem]">
         <EditBoardForm />
       </DialogDescription>
     </DialogHeader>

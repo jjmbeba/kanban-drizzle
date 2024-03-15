@@ -14,6 +14,19 @@ export type BoardColumn = {
 };
 
 export type ResponseMessageOnly = {
-  message:string;
-  error:string | null;
-}
+  message: string;
+  error: string | null;
+};
+
+export type UpdatedBoard = {
+  board_columns: {
+    id: number;
+    name: string;
+    createdAt: Date | null;
+    board_id: number;
+  }[];
+  id: number;
+  name: string;
+  user_id: string;
+  createdAt: Date | null;
+};

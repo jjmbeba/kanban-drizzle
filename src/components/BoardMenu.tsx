@@ -11,10 +11,7 @@ import {
 import { useSidebarStore } from "@/store/sidebarStore";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
-import {
-  ChevronDown,
-  Loader2
-} from "lucide-react";
+import { ChevronDown, Loader2 } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Board } from "../types";
 import AddBoard from "./AddBoard";
@@ -43,9 +40,16 @@ const BoardMenu = () => {
 
   useEffect(() => {
     if (!isLoading && boards?.[0]) {
-      setActiveBoard(boards[0]);
+      if (activeBoard) {
+        const board = boards.find(
+          (board: Board) => activeBoard.id === board.id
+        );
+        setActiveBoard(board);
+      } else {
+        setActiveBoard(boards[0]);
+      }
     }
-  }, [boards, isLoading, setActiveBoard]);
+  }, [boards, isLoading, setActiveBoard, activeBoard]);
 
   if (isLoading) {
     return (
