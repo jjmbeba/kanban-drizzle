@@ -13,6 +13,19 @@ export type BoardColumn = {
   board_id: number | null;
 };
 
+export type BoardColumnsWithTasks = {
+  name: string;
+  id: number;
+  createdAt: Date | null;
+  board_id: number;
+  tasks: {
+    title: string;
+    id: number;
+    createdAt: Date | null;
+    column_id: number;
+  }[];
+}[];
+
 export type ResponseMessageOnly = {
   message: string;
   error: string | null;

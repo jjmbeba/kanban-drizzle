@@ -3,6 +3,7 @@
 import { useSidebarStore } from "@/store/sidebarStore";
 import { motion } from "framer-motion";
 import CreateColumnPrompt from "./CreateColumnPrompt";
+import TaskDisplay from "./TaskDisplay";
 
 const BoardOverview = () => {
   const [showSidebar, activeBoard] = useSidebarStore((state) => [
@@ -26,7 +27,11 @@ const BoardOverview = () => {
       animate={showSidebar ? "showSidebar" : "hideSidebar"}
       className="h-full"
     >
-      {!activeBoard?.board_columns[0] && <CreateColumnPrompt />}
+      {!activeBoard?.board_columns[0] ? (
+        <CreateColumnPrompt />
+      ) : (
+        <TaskDisplay />
+      )}
     </motion.div>
   );
 };

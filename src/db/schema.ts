@@ -45,11 +45,12 @@ export const board_columns = pgTable(
   }
 );
 
-export const boardColumnsRelations = relations(board_columns, ({ one }) => ({
+export const boardColumnsRelations = relations(board_columns, ({ one, many }) => ({
   board: one(boards, {
     fields: [board_columns.board_id],
     references: [boards.id],
   }),
+  tasks: many(tasks),
 }));
 
 export const tasks = pgTable(
@@ -66,6 +67,13 @@ export const tasks = pgTable(
     };
   }
 );
+
+export const tasksRelations = relations(tasks, ({ one }) => ({
+  board_columns: one(board_columns, {
+    fields: [tasks.column_id],
+    references: [board_columns.id],
+  }),
+}));
 
 export const sub_tasks = pgTable(
   "sub_tasks",

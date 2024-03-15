@@ -1,18 +1,9 @@
-import { UserButton, ClerkLoading } from "@clerk/nextjs";
-import AddTaskButton from "./AddTaskButton";
+"use client";
+
+import { ClerkLoading, UserButton } from "@clerk/nextjs";
 import BoardMenu from "./BoardMenu";
-import { Skeleton } from "./ui/skeleton";
-import { Button } from "./ui/button";
-import { MoreHorizontal, MoreVertical } from "lucide-react";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import OptionsMenu from "./OptionsMenu";
+import { Skeleton } from "./ui/skeleton";
 
 const NavbarActions = () => {
   return (

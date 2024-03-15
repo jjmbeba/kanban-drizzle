@@ -1,4 +1,3 @@
-import { addBoardSchema } from "@/components/forms/AddBoardForm";
 import { editBoardSchema } from "@/components/forms/EditBoardForm";
 import db from "@/db/drizzle";
 import { board_columns, boards } from "@/db/schema";

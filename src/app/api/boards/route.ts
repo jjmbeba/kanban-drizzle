@@ -2,7 +2,6 @@ import { addBoardSchema } from "@/components/forms/AddBoardForm";
 import db from "@/db/drizzle";
 import { board_columns, boards } from "@/db/schema";
 import { auth } from "@clerk/nextjs";
-import { revalidateTag } from "next/cache";
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 
@@ -14,7 +13,7 @@ export async function GET(request: Request) {
   const data = await db.query.boards.findMany({
     where: (boards, { eq }) => eq(boards.user_id, userId),
     with: {
-      board_columns: true,
+      board_columns:true,
     },
   });
   return Response.json(data);

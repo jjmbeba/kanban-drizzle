@@ -118,4 +118,15 @@
   .input-border {
     border-radius: 0.25rem;
   }
+
+  .body-md {
+    font-size: 0.75rem;
+    line-height: 0.9375rem;
+    font-weight: bold;
+  }
+  .body-lg {
+    font-size: 0.8125rem;
+    line-height: 1.4375rem;
+    font-weight: medium;
+  }
 }

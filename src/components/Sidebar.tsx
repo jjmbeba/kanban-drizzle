@@ -1,24 +1,16 @@
 "use client";
 
 import { useSidebarStore } from "@/store/sidebarStore";
-import React, { useEffect } from "react";
-import { Button } from "./ui/button";
-import { Eye, EyeOff, Loader2 } from "lucide-react";
-import ThemeToggle from "./ThemeToggle";
-import { useQuery } from "@tanstack/react-query";
-import { useUser } from "@clerk/nextjs";
-import axios from "axios";
 import { Board } from "@/types";
+import { useUser } from "@clerk/nextjs";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
 import { motion } from "framer-motion";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
+import { useEffect } from "react";
 import AddBoard from "./AddBoard";
+import ThemeToggle from "./ThemeToggle";
+import { Button } from "./ui/button";
 
 const Sidebar = () => {
   const [showSidebar, setShowSidebar, activeBoard, setActiveBoard] =
@@ -62,7 +54,7 @@ const Sidebar = () => {
       </div>
     );
   } else if (!boards) {
-    return <div className="">Add new board</div>;
+    return;
   }
 
   const variants = {
