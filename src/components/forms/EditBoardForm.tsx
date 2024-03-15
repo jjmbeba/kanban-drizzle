@@ -182,7 +182,7 @@ const EditBoardForm = () => {
         </Button>
         <Button className="w-full" type="submit" disabled={editPending}>
           {editPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
-          Submit
+          Save changes
         </Button>
       </form>
     </Form>

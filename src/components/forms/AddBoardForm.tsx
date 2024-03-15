@@ -7,7 +7,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
-  FormMessage
+  FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useSidebarStore } from "@/store/sidebarStore";
@@ -163,7 +163,7 @@ const AddBoardForm = () => {
         </Button>
         <Button className="w-full" type="submit" disabled={addBoardPending}>
           {addBoardPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
-          Submit
+          Create New Board
         </Button>
       </form>
     </Form>
