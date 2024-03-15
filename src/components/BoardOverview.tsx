@@ -1,18 +1,33 @@
 "use client";
 
 import { useSidebarStore } from "@/store/sidebarStore";
+import { motion } from "framer-motion";
+import CreateColumnPrompt from "./CreateColumnPrompt";
 
 const BoardOverview = () => {
-  const showSidebar = useSidebarStore((state) => state.showSidebar);
+  const [showSidebar, activeBoard] = useSidebarStore((state) => [
+    state.showSidebar,
+    state.activeBoard,
+  ]);
+
+  const variants = {
+    showSidebar: {
+      x: "16.25rem",
+    },
+    hideSidebar: {
+      x: 0,
+    },
+  };
 
   return (
-    <div
-      className={`transition-all duration-150 ${
-        showSidebar ? "translate-x-0" : "translate-x-[-16.25rem]"
-      }`}
+    <motion.div
+      variants={variants}
+      initial={{ x: 0 }}
+      animate={showSidebar ? "showSidebar" : "hideSidebar"}
+      className="h-full"
     >
-      BoardOverview
-    </div>
+      {!activeBoard?.board_columns[0] && <CreateColumnPrompt />}
+    </motion.div>
   );
 };
 

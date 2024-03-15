@@ -45,7 +45,7 @@ const OptionsMenu = () => {
           </DialogTrigger>
         </DropdownMenuContent>
       </DropdownMenu>
-      <DialogContent className="max-w-[21.4375rem] md:max-w-[30rem] rounded md:rounded-[0.375rem] border-none ">
+      <DialogContent className="max-w-[21.4375rem] md:max-w-[30rem] rounded md:rounded-[0.375rem] border-none">
         {action === "editBoard" ? (
           <EditBoard setOpen={setOpen} />
         ) : action === "deleteBoard" ? (
