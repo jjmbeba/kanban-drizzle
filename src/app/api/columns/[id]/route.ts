@@ -18,6 +18,8 @@ export async function GET(
       },
     });
 
+    //Fetch tasks and subtasks
+
     if (!boardColumns) {
       return NextResponse.json(
         {

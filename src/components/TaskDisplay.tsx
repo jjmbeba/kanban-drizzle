@@ -60,13 +60,11 @@ const TaskDisplay = () => {
     return <div className="">Add new board</div>;
   }
 
-  console.log(Array.isArray(boardColumns), boardColumns);
-
   return (
-    <ScrollArea className="w-96 whitespace-nowrap">
-      <div className="flex w-max space-x-[1.4375rem] mx-4 my-6">
+    <ScrollArea className="w-80 whitespace-nowrap">
+      <div className="flex w-max space-x-[1.4375rem] px-4 my-6">
         {boardColumns.map(({ name, id, tasks }) => {
-          return <ColumnDisplay key={id} name={name} tasks={tasks}/>;
+          return <ColumnDisplay key={id} name={name} tasks={tasks} />;
         })}
       </div>
       <ScrollBar orientation="horizontal" />
