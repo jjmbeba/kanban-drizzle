@@ -31,6 +31,50 @@ const SidebarSkeleton = ({
         </Button>
       </div>
       <div className="pl-[1.1875rem] text-left text-[#828FA3] uppercase text-[0.75rem] tracking-[0.15rem]">
+        <Skeleton className="h-[1.125rem] w-[7rem]" />
+      </div>
+      <div className="pt-[1.375rem] flex flex-col items-start text-[0.9375rem] leading-[1.1875rem] font-bold gap-4">
+        {new Array(4).fill(0).map((_, index) => (
+          <Skeleton
+            key={index}
+            className="py-[1.125rem] pl-[1.1875rem] flex items-center gap-[0.8125rem] rounded-r-[6.25rem] text-primary w-[14.95rem] h-[1.1875rem]"
+          />
+        ))}
+        <div className="mx-[0.8125rem] mt-8">
+          <ThemeToggle />
+        </div>
+        {
+          <Button
+            variant={"ghost"}
+            className="text-[#828FA3] mx-[0.8125rem] mt-[2.25rem] flex items-center gap-[0.625rem]"
+            onClick={() => setShowSidebar(false)}
+          >
+            <EyeOff /> Hide sidebar
+          </Button>
+        }
+      </div>
+    </div>
+  );
+};
+
+const CreateBoardPrompt = ({
+  showSidebar,
+  setShowSidebar,
+}: {
+  showSidebar: boolean;
+  setShowSidebar: (showSidebar: boolean) => void;
+}) => {
+  return (
+    <div className="relative h-full bg-white dark:bg-[#2b2c37]  pt-[1.875rem] pb-10 max-w-[16.25rem] hidden md:block border-r border-r-[#e4ebfa] dark:border-r-[#3e3f4e]">
+      <div className="absolute bottom-[2.0625rem] lg:bottom-4 -right-[2.5rem] hidden md:block">
+        <Button
+          size={"icon"}
+          className="rounded-l-none flex items-center justify-center"
+        >
+          {!showSidebar ? <Eye /> : <EyeOff />}
+        </Button>
+      </div>
+      <div className="pl-[1.1875rem] text-left text-[#828FA3] uppercase text-[0.75rem] tracking-[0.15rem]">
         {/* All boards ({boards.length}) */}
       </div>
       <div className="pt-[1.375rem] flex flex-col items-start text-[0.9375rem] leading-[1.1875rem] font-bold gap-4">
@@ -86,7 +130,7 @@ const Sidebar = () => {
     }
   }, [boards, isLoading, setActiveBoard, activeBoard]);
 
-  if (!isLoading && showSidebar) {
+  if (isLoading && showSidebar) {
     return (
       <SidebarSkeleton
         showSidebar={showSidebar}
@@ -96,15 +140,6 @@ const Sidebar = () => {
   } else if (!boards) {
     return;
   }
-
-  const variants = {
-    showSidebar: {
-      x: 0,
-    },
-    hideSidebar: {
-      x: "-16.25rem",
-    },
-  };
 
   return (
     <div className="relative h-full bg-white dark:bg-[#2b2c37]  pt-[1.875rem] pb-10 max-w-[16.25rem] hidden md:block border-r border-r-[#e4ebfa] dark:border-r-[#3e3f4e]">
