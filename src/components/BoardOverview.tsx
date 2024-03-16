@@ -13,7 +13,7 @@ const BoardOverview = () => {
 
   const variants = {
     showSidebar: {
-      x: "16.25rem",
+      x: "-7.25rem",
     },
     hideSidebar: {
       x: 0,
@@ -22,10 +22,11 @@ const BoardOverview = () => {
 
   return (
     <motion.div
-      variants={variants}
-      initial={{ x: 0 }}
-      animate={showSidebar ? "showSidebar" : "hideSidebar"}
-      className="h-full"
+      // variants={variants}
+      // initial={{ x: "-7.25rem" }}
+      // animate={showSidebar ? "showSidebar" : "hideSidebar"}
+      // className="h-full w-screen"
+      className="flex-1"
     >
       {!activeBoard?.board_columns[0] ? (
         <CreateColumnPrompt />

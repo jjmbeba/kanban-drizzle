@@ -7,6 +7,7 @@ import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
 import Providers from "@/components/providers/Providers";
 import { Toaster } from "@/components/ui/sonner";
+import BodyWrapper from "@/components/BodyWrapper";
 
 const jakarta_sans = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
@@ -33,10 +34,10 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               <Navbar />
-              <div className="flex h-[calc(100%-4.4511875rem)]">
+              <BodyWrapper>
                 <Sidebar />
                 {children}
-              </div>
+              </BodyWrapper>
             </ThemeProvider>
           </Providers>
         </body>
