@@ -75,12 +75,10 @@ const CreateBoardPrompt = ({
         </Button>
       </div>
       <div className="pl-[1.1875rem] text-left text-[#828FA3] uppercase text-[0.75rem] tracking-[0.15rem]">
-        {/* All boards ({boards.length}) */}
+        No boards found
       </div>
       <div className="pt-[1.375rem] flex flex-col items-start text-[0.9375rem] leading-[1.1875rem] font-bold gap-4">
-        {new Array(4).fill(0).map((_) => (
-          <Skeleton className="py-[1.125rem] pl-[1.1875rem] flex items-center gap-[0.8125rem] rounded-r-[6.25rem] text-primary w-[14.95rem] h-[1.1875rem]" />
-        ))}
+        <AddBoard />
         <div className="mx-[0.8125rem] mt-8">
           <ThemeToggle />
         </div>
@@ -138,7 +136,12 @@ const Sidebar = () => {
       />
     );
   } else if (!boards) {
-    return;
+    return (
+      <CreateBoardPrompt
+        showSidebar={showSidebar}
+        setShowSidebar={setShowSidebar}
+      />
+    );
   }
 
   return (
