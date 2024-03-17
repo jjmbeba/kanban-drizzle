@@ -63,7 +63,9 @@ export const tasks = pgTable(
   {
     id: serial("id").primaryKey(),
     column_id: integer("column_id")
-      .references(() => board_columns.id)
+      .references(() => board_columns.id, {
+        onDelete: "cascade",
+      })
       .notNull(),
     title: text("title").notNull(),
     description: text("description"),
@@ -76,11 +78,12 @@ export const tasks = pgTable(
   }
 );
 
-export const tasksRelations = relations(tasks, ({ one }) => ({
+export const tasksRelations = relations(tasks, ({ one, many }) => ({
   board_columns: one(board_columns, {
     fields: [tasks.column_id],
     references: [board_columns.id],
   }),
+  sub_tasks: many(sub_tasks),
 }));
 
 export const sub_tasks = pgTable(
@@ -88,7 +91,9 @@ export const sub_tasks = pgTable(
   {
     id: serial("id").primaryKey(),
     task_id: integer("task_id")
-      .references(() => tasks.id)
+      .references(() => tasks.id, {
+        onDelete: "cascade",
+      })
       .notNull(),
     name: text("name").notNull(),
     createdAt: timestamp("created_at").defaultNow(),
@@ -99,3 +104,10 @@ export const sub_tasks = pgTable(
     };
   }
 );
+
+export const subTasksRelations = relations(sub_tasks, ({ one }) => ({
+  task: one(tasks, {
+    fields: [sub_tasks.task_id],
+    references: [tasks.id],
+  }),
+}));

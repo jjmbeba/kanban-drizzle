@@ -15,6 +15,13 @@
       "when": 1710585582369,
       "tag": "0001_jittery_lake",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1710717538444,
+      "tag": "0002_clean_slipstream",
+      "breakpoints": true
     }
   ]
 }

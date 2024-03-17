@@ -15,22 +15,30 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
-import { Info, X } from "lucide-react";
+import { Info, Loader2, X } from "lucide-react";
 import { useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { Textarea } from "../ui/textarea";
 import { useZodForm } from "./AddBoardForm";
 import { useSidebarStore } from "@/store/sidebarStore";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { toast } from "sonner";
+import { AnimatePresence } from "framer-motion";
+import { Dispatch, SetStateAction } from "react";
 
-const addTaskSchema = z.object({
+type Props = {
+  setOpen: Dispatch<SetStateAction<boolean>>;
+};
+
+export const addTaskSchema = z.object({
   title: z.string().min(2, {
     message: "Title must be at least 2 characters long",
   }),
   description: z.string().min(5, {
     message: "Description must be at least 5 characters",
   }),
-  column_id: z.coerce
-    .string({
+  column_id: z.string({
       required_error: "Status is required",
     })
     .min(1, {
@@ -38,15 +46,16 @@ const addTaskSchema = z.object({
     }),
   subtasks: z
     .object({
-      title: z.string().min(1, {
-        message: "Title is required",
+      name: z.string().min(1, {
+        message: "Subtask title is required",
       }),
     })
     .array(),
 });
 
-const AddTaskForm = () => {
+const AddTaskForm = ({setOpen}:Props) => {
   const [activeBoard] = useSidebarStore((state) => [state.activeBoard]);
+  const queryClient = useQueryClient();
 
   const form = useZodForm({
     schema: addTaskSchema,
@@ -66,8 +75,27 @@ const AddTaskForm = () => {
     name: "subtasks",
   });
 
+  const { mutate: addTask, isPending: addTaskPending } = useMutation({
+    mutationKey: ["tasks"],
+    mutationFn: async (values: z.infer<typeof addTaskSchema>) => {
+      return await axios
+        .post("/api/tasks", values)
+        .then((res) => {
+          toast.success(res.data.message);
+        })
+        .catch((err) => console.log(err));
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["board_columns"],
+      });
+      form.reset();
+      setOpen(false);
+    },
+  });
+
   async function onSubmit(values: z.infer<typeof addTaskSchema>) {
-    console.log(values);
+    addTask(values);
   }
 
   return (
@@ -115,7 +143,7 @@ const AddTaskForm = () => {
         </div>
         <div>
           {fields.map((field, index) => {
-            const errorForField = errors?.subtasks?.[index]?.title;
+            const errorForField = errors?.subtasks?.[index]?.name;
 
             return (
               <FormItem className="h-auto" key={field.id}>
@@ -124,7 +152,7 @@ const AddTaskForm = () => {
                     <Input
                       className="input-border"
                       placeholder="e.g. Make coffee"
-                      {...form.register(`subtasks.${index}.title`)}
+                      {...form.register(`subtasks.${index}.name`)}
                     />
                     <Button
                       onClick={() => remove(index)}
@@ -151,7 +179,7 @@ const AddTaskForm = () => {
           }}
           onClick={() => {
             append({
-              title: "",
+              name: "",
             });
           }}
           type="button"
@@ -159,46 +187,45 @@ const AddTaskForm = () => {
         >
           + Add New Subtask
         </Button>
-        {!activeBoard?.board_columns || activeBoard.board_columns.length < 1 ? (
-          <div className="flex items-center text-primary">
-            <Info className="mr-2 h-4 w-4" />
-            No board columns found. Add columns to board to continue.
-          </div>
-        ) : (
-          <FormField
-            control={form.control}
-            name="column_id"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Status</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger className="rounded-[0.25rem]">
-                      <SelectValue placeholder="Select a status" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent className="rounded-[0.25rem] border-muted">
-                    {activeBoard?.board_columns.map(({ id, name }) => (
-                      <SelectItem
-                        key={id}
-                        className="rounded-[0.25rem]"
-                        value={id.toString()}
-                      >
-                        {name}
-                      </SelectItem>
-                    ))}
-                  </SelectContent>
-                </Select>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-        )}
-        <Button className="w-full" type="submit">
-          {/* {addBoardPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />} */}
+        <AnimatePresence>
+          {!activeBoard?.board_columns ||
+          activeBoard.board_columns.length < 1 ? (
+            <div className="flex items-center text-primary">
+              <Info className="mr-2 h-4 w-4" />
+              No board columns found. Add columns to board to continue.
+            </div>
+          ) : (
+            <FormField
+              control={form.control}
+              name="column_id"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Email</FormLabel>
+                  <Select
+                    onValueChange={field.onChange}
+                    defaultValue={field.value}
+                  >
+                    <FormControl>
+                      <SelectTrigger className="rounded-[0.5rem]">
+                        <SelectValue placeholder="Select the task status" />
+                      </SelectTrigger>
+                    </FormControl>
+                    <SelectContent className="rounded-[0.5rem]">
+                      {activeBoard.board_columns.map(({ id, name }) => (
+                        <SelectItem key={id} value={id.toString()}>
+                          {name}
+                        </SelectItem>
+                      ))}
+                    </SelectContent>
+                  </Select>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          )}
+        </AnimatePresence>
+        <Button className="w-full" type="submit" disabled={addTaskPending}>
+          {addTaskPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
           Create Task
         </Button>
       </form>

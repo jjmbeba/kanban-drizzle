@@ -17,7 +17,7 @@ const AddTask = ({ setOpen }: Props) => {
     <DialogHeader>
       <DialogTitle className="text-left">Add task</DialogTitle>
       <DialogDescription className="text-left pb-[1.875rem]">
-        <AddTaskForm/>
+        <AddTaskForm setOpen={setOpen}/>
       </DialogDescription>
     </DialogHeader>
   );
