@@ -18,11 +18,7 @@ const CreateColumnPrompt = () => {
 
   return (
     <div className="h-full flex flex-col items-center justify-center px-10">
-      <h2
-        className={`heading-lg text-center mb-[1.875rem] ${
-          !showSidebar && "pl-10"
-        }`}
-      >
+      <h2 className={`heading-lg text-center mb-[1.875rem]`}>
         This board is empty. Create a new column to get started.
       </h2>
       <Dialog>
