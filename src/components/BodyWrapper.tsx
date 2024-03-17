@@ -14,20 +14,25 @@ const BodyWrapper = ({ children }: Props) => {
   const variants = {
     showSidebar: {
       x: 0,
-      width: "auto",
+      transition: {
+        duration: 0.5,
+      },
     },
     hideSidebar: {
       x: "-16.25rem",
-      width: "133dvw",
+      transition: {
+        duration: 0.5,
+      },
+      width: "calc(1308px+16.25rem)",
     },
   };
 
   return (
     <motion.div
       variants={variants}
-      initial={{ x: "-16.25rem", width: "133dvw" }}
+      initial={{ x: "-16.25rem" }}
       animate={showSidebar ? "showSidebar" : "hideSidebar"}
-      className={`flex h-[calc(100%-4.4511875rem)] ${showSidebar}`}
+      className={`flex h-[calc(100%-4.4511875rem)]`}
     >
       {children}
     </motion.div>

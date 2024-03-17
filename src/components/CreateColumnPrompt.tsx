@@ -11,11 +11,18 @@ import {
 } from "@/components/ui/dialog";
 import { Button } from "./ui/button";
 import EditBoardForm from "./forms/EditBoardForm";
+import { useSidebarStore } from "@/store/sidebarStore";
 
 const CreateColumnPrompt = () => {
+  const [showSidebar] = useSidebarStore((state) => [state.showSidebar]);
+
   return (
     <div className="h-full flex flex-col items-center justify-center px-10">
-      <h2 className="heading-lg text-center mb-[1.875rem]">
+      <h2
+        className={`heading-lg text-center mb-[1.875rem] ${
+          !showSidebar && "pl-10"
+        }`}
+      >
         This board is empty. Create a new column to get started.
       </h2>
       <Dialog>

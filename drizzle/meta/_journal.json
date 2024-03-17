@@ -8,6 +8,13 @@
       "when": 1710351110969,
       "tag": "0000_broken_harry_osborn",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1710585582369,
+      "tag": "0001_jittery_lake",
+      "breakpoints": true
     }
   ]
 }

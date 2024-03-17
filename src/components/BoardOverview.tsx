@@ -6,34 +6,18 @@ import CreateColumnPrompt from "./CreateColumnPrompt";
 import TaskDisplay from "./TaskDisplay";
 
 const BoardOverview = () => {
-  const [showSidebar, activeBoard] = useSidebarStore((state) => [
-    state.showSidebar,
+  const [activeBoard] = useSidebarStore((state) => [
     state.activeBoard,
   ]);
 
-  const variants = {
-    showSidebar: {
-      x: "-7.25rem",
-    },
-    hideSidebar: {
-      x: 0,
-    },
-  };
-
   return (
-    <motion.div
-      // variants={variants}
-      // initial={{ x: "-7.25rem" }}
-      // animate={showSidebar ? "showSidebar" : "hideSidebar"}
-      // className="h-full w-screen"
-      className="flex-1"
-    >
+    <div className="flex-1 h-full">
       {!activeBoard?.board_columns[0] ? (
         <CreateColumnPrompt />
       ) : (
         <TaskDisplay />
       )}
-    </motion.div>
+    </div>
   );
 };
 

@@ -14,11 +14,11 @@ const Navbar = () => {
   const variants = {
     showSidebar: {
       paddingRight: "5.65rem",
-      transition: { duration: 0.5 },
+      transition: { duration: 0.4, type:"spring" },
     },
     hideSidebar: {
       paddingRight: "1.5625rem",
-      transition: { duration: 0.5 },
+      transition: { duration: 0.4, type:"spring" },
     },
   };
 

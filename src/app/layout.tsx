@@ -25,7 +25,7 @@ export default function RootLayout({
     <ClerkProvider>
       <html lang="en" className="h-[100dvh]">
         <body className={`${jakarta_sans.className} h-full`}>
-          <Toaster richColors/>
+          <Toaster richColors />
           <Providers>
             <ThemeProvider
               attribute="class"
@@ -34,10 +34,10 @@ export default function RootLayout({
               disableTransitionOnChange
             >
               <Navbar />
-              <BodyWrapper>
+              <div className="flex h-[calc(100%-4.4511875rem)]">
                 <Sidebar />
                 {children}
-              </BodyWrapper>
+              </div>
             </ThemeProvider>
           </Providers>
         </body>

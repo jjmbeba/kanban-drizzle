@@ -1,5 +1,9 @@
 import BoardOverview from "@/components/BoardOverview";
 
 export default function Home() {
-  return <BoardOverview />;
+  return (
+    <main className="flex-1">
+      <BoardOverview />
+    </main>
+  );
 }
