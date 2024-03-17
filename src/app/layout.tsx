@@ -1,13 +1,12 @@
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/Sidebar";
+import Providers from "@/components/providers/Providers";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 import { ClerkProvider } from "@clerk/nextjs";
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
 import "./globals.css";
-import Providers from "@/components/providers/Providers";
-import { Toaster } from "@/components/ui/sonner";
-import BodyWrapper from "@/components/BodyWrapper";
 
 const jakarta_sans = Plus_Jakarta_Sans({ subsets: ["latin"] });
 
