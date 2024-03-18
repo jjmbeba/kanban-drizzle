@@ -200,7 +200,7 @@ const AddTaskForm = ({setOpen}:Props) => {
               name="column_id"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Email</FormLabel>
+                  <FormLabel>Status</FormLabel>
                   <Select
                     onValueChange={field.onChange}
                     defaultValue={field.value}

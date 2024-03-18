@@ -8,10 +8,12 @@ type Props = {
     id: number;
     createdAt: Date | null;
     column_id: number;
+    description: string;
     sub_tasks: {
       id: number;
       task_id: number;
       name: string;
+      done: boolean;
       createdAt: Date | null;
     }[];
   }[];
@@ -27,7 +29,9 @@ const ColumnDisplay = ({ name, tasks }: Props) => {
         </p>
       </div>
       <div className="mt-[1.6875rem] flex flex-col items-start gap-[1.3125rem]">
-        {tasks.map(({id, title, sub_tasks}) => <TaskCard key={id} title={title} sub_tasks={sub_tasks}/>)}
+        {tasks.map((task) => (
+          <TaskCard key={task.id} {...task} />
+        ))}
       </div>
     </div>
   );

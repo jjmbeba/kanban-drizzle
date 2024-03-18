@@ -69,7 +69,7 @@ export const tasks = pgTable(
       })
       .notNull(),
     title: text("title").notNull(),
-    description: text("description"),
+    description: text("description").notNull(),
     createdAt: timestamp("created_at").defaultNow(),
   },
   (table) => {

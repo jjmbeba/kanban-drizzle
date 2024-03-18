@@ -35,8 +35,6 @@ export async function GET(
       );
     }
 
-    console.log(boardColumns[0].tasks[0].sub_tasks);
-
     return NextResponse.json({
       boardColumns,
     });

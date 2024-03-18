@@ -21,8 +21,6 @@ export async function POST(request: Request) {
 
   const req: z.infer<typeof addTaskSchema> = await request.json();
 
-  console.log(req);
-
   try {
     await db.transaction(async (tx) => {
       const result = await tx
@@ -59,6 +57,4 @@ export async function POST(request: Request) {
       }
     );
   }
-
-  console.log(req);
 }

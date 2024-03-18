@@ -7,6 +7,8 @@ import ColumnDisplay from "./ColumnDisplay";
 import TaskCardSkeleton from "./TaskCardSkeleton";
 import { ScrollArea, ScrollBar } from "./ui/scroll-area";
 import { Skeleton } from "./ui/skeleton";
+import { useEffect } from "react";
+import { useColumnsStore } from "@/store/columnsStore";
 
 const TaskDisplaySkeleton = () => {
   return (
@@ -38,6 +40,9 @@ const TaskDisplaySkeleton = () => {
 
 const TaskDisplay = () => {
   const [activeBoard] = useSidebarStore((state) => [state.activeBoard]);
+  const [setAvailableColumns] = useColumnsStore((state) => [
+    state.setAvailableColumns,
+  ]);
 
   const { data: boardColumns, isLoading } = useQuery({
     queryKey: ["board_columns"],
@@ -60,11 +65,27 @@ const TaskDisplay = () => {
     return <div className="">Add new board</div>;
   }
 
+  useEffect(() => {
+    const availableColumns = boardColumns.map(({ id, name }) => {
+      return {
+        id,
+        name,
+      };
+    });
+    setAvailableColumns(availableColumns);
+  }, [setAvailableColumns, boardColumns]);
+
   return (
     <ScrollArea className="w-80 md:w-full whitespace-nowrap">
       <div className="flex w-max space-x-[1.4375rem] px-4 my-6">
         {boardColumns.map(({ name, id, tasks }) => {
-          return <ColumnDisplay key={id} name={name} tasks={tasks} />;
+          return (
+            <ColumnDisplay
+              key={id}
+              name={name}
+              tasks={tasks}
+            />
+          );
         })}
       </div>
       <ScrollBar orientation="horizontal" />

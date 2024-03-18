@@ -6,6 +6,21 @@ export type Board = {
   board_columns: BoardColumn[];
 };
 
+export type Task =  {
+    title: string;
+    id: number;
+    createdAt: Date | null;
+    column_id: number;
+    description: string;
+    sub_tasks: {
+        id: number;
+        task_id: number;
+        name: string;
+        done: boolean;
+        createdAt: Date | null;
+    }[];
+}
+
 export type BoardColumn = {
   id: number;
   name: string | null;
@@ -21,13 +36,14 @@ export type BoardColumnsWithTasks = {
   tasks: {
     id: number;
     createdAt: Date | null;
-    description: string | null;
+    description: string;
     column_id: number;
     title: string;
     sub_tasks: {
       id: number;
       task_id: number;
       name:string;
+      done:boolean;
       createdAt: Date | null;
     }[];
   }[];

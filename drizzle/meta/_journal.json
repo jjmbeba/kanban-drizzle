@@ -36,6 +36,13 @@
       "when": 1710720261749,
       "tag": "0004_flat_rumiko_fujikawa",
       "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "5",
+      "when": 1710757729822,
+      "tag": "0005_stormy_starfox",
+      "breakpoints": true
     }
   ]
 }
