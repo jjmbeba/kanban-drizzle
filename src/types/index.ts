@@ -21,6 +21,14 @@ export type Task =  {
     }[];
 }
 
+export type SubTask = {
+  id: number;
+  task_id: number;
+  name: string;
+  done: boolean;
+  createdAt: Date | null;
+};
+
 export type BoardColumn = {
   id: number;
   name: string | null;

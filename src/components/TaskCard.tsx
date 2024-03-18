@@ -12,11 +12,12 @@ import { Button } from "./ui/button";
 import { MoreVertical } from "lucide-react";
 import CurrentStatus from "./CurrentStatus";
 import { Task } from "@/types";
+import SubtasksList from "./SubtasksList";
 
 interface Props extends Task {}
 
 const TaskCard = ({ id, title, sub_tasks, description, column_id }: Props) => {
-  const doneSubtasks = sub_tasks.filter((subtask) => subtask.done).length;
+    const doneSubtasks = sub_tasks.filter((subtask) => subtask.done).length;
 
   return (
     <Dialog>
@@ -29,20 +30,16 @@ const TaskCard = ({ id, title, sub_tasks, description, column_id }: Props) => {
             </Button>
           </div>
           <h5 className="mt-[0.8125rem] body-md text-muted-foreground">
-            0 of {sub_tasks.length} subtasks
+            {doneSubtasks} of {sub_tasks.length} subtasks
           </h5>
         </div>
       </DialogTrigger>
-      <DialogContent className="rounded-[0.375rem] max-w-[21.4375rem]">
+      <DialogContent className="rounded-[0.375rem] max-w-[21.4375rem] border-none outline-none">
         <DialogHeader className="text-left">
           <DialogTitle className="heading-lg">{title}</DialogTitle>
           <DialogDescription>
             <p className="body-lg">{description}</p>
-            <div className="mt-[2.125rem]">
-              <h3 className="body-md">
-                Subtasks({doneSubtasks} of {sub_tasks.length})
-              </h3>
-            </div>
+            <SubtasksList subTasks={sub_tasks} doneSubtasks={doneSubtasks} />
             <div className="mt-[1.75rem]">
               <h3 className="body-md">Current status</h3>
               <CurrentStatus column_id={column_id} task_id={id} />
