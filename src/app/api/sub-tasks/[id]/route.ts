@@ -1,6 +1,6 @@
 import db from "@/db/drizzle";
-import { sub_tasks } from "@/db/schema";
-import { eq } from "drizzle-orm";
+import { sub_tasks, tasks } from "@/db/schema";
+import { count, eq } from "drizzle-orm";
 import { NextResponse } from "next/server";
 
 export async function PATCH(
@@ -19,8 +19,6 @@ export async function PATCH(
       })
       .where(eq(sub_tasks.id, parseInt(subtaskID)))
       .returning();
-
-    console.log(result);
 
     return NextResponse.json({
       message: `${result[0].name} updated successfully`,

@@ -14,7 +14,7 @@ type Props = {
 
 const SubtasksList = ({ subTasks, doneSubtasks }: Props) => {
   const queryClient = useQueryClient();
-  const [completion, setCompletion] = useState<CheckedState>(false);
+  const [completion, setCompletion] = useState<CheckedState | undefined>(undefined);
 
   const { mutate: changeDoneStatus, isPending: statusPending } = useMutation({
     mutationKey: ["tasks"],
@@ -59,7 +59,7 @@ const SubtasksList = ({ subTasks, doneSubtasks }: Props) => {
                       onChange(checked, id);
                       setCompletion(checked);
                     }}
-                    defaultChecked={completion}
+                    defaultChecked={completion === undefined ? done : completion}
                     className="rounded-[0.125rem]"
                     disabled={statusPending}
                   />
