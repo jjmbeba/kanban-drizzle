@@ -13,6 +13,7 @@ import { MoreVertical } from "lucide-react";
 import CurrentStatus from "./CurrentStatus";
 import { Task } from "@/types";
 import SubtasksList from "./SubtasksList";
+import TaskMenu from "./TaskMenu";
 
 interface Props extends Task {}
 
@@ -33,7 +34,10 @@ const TaskCard = ({ id, title, sub_tasks, description, column_id }: Props) => {
       </DialogTrigger>
       <DialogContent className="rounded-[0.375rem] max-w-[21.4375rem] border-none outline-none">
         <DialogHeader className="text-left">
-          <DialogTitle className="heading-lg">{title}</DialogTitle>
+          <DialogTitle className="heading-lg flex items-center justify-between">
+            {title}
+           <TaskMenu/>
+          </DialogTitle>
           <DialogDescription>
             <p className="body-lg">{description}</p>
             <SubtasksList subTasks={sub_tasks} doneSubtasks={doneSubtasks} />
