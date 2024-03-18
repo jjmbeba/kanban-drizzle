@@ -36,3 +36,28 @@ export async function PATCH(
     );
   }
 }
+
+export async function DELETE(
+  request: Request,
+  { params }: { params: { id: string } }
+) {
+  const taskID = params.id;
+
+  try {
+    const res = await db.delete(tasks).where(eq(tasks.id, parseInt(taskID))).returning();
+
+    return NextResponse.json({
+      message:`${res[0].title} task deleted successfully`
+    })
+  } catch (error) {
+    console.log(error);
+    return NextResponse.json(
+      {
+        message: "Something went wrong",
+      },
+      {
+        status: 500,
+      }
+    );
+  }
+}

@@ -8,13 +8,37 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { Loader2 } from "lucide-react";
+import { toast } from "sonner";
 
 type Props = {
   id: Number;
   title: String;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 };
 
-const DeleteTask = ({ id, title }: Props) => {
+const DeleteTask = ({ id, title, setOpen }: Props) => {
+  const queryClient = useQueryClient();
+
+  const { mutate: deleteTask, isPending: deletePending } = useMutation({
+    mutationKey: ["tasks"],
+    mutationFn: async () => {
+      return await axios
+        .delete(`/api/tasks/${id}`)
+        .then((res) => {
+          toast.success(res.data.message);
+        })
+        .catch((err) => console.log(err));
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["board_columns"],
+      });
+    },
+  });
+
   return (
     <DialogContent className="max-w-[21.4375rem] rounded-[0.375rem] border-none outline-none">
       <DialogHeader>
@@ -27,10 +51,22 @@ const DeleteTask = ({ id, title }: Props) => {
         </DialogDescription>
       </DialogHeader>
       <DialogFooter className="flex flex-col items-center gap-4">
-        <Button className="w-full" variant={"destructive"} type="submit">
+        <Button
+          className="w-full"
+          variant={"destructive"}
+          type="submit"
+          disabled={deletePending}
+          onClick={() => deleteTask()}
+        >
+          {deletePending && <Loader2 className="mr-2 h-4 animate-spin" />}
           Delete
         </Button>
-        <Button className="w-full" variant={"secondary"} type="button">
+        <Button
+          onClick={() => setOpen(false)}
+          className="w-full"
+          variant={"secondary"}
+          type="button"
+        >
           Cancel
         </Button>
       </DialogFooter>

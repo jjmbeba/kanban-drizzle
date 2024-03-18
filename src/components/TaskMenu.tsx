@@ -29,9 +29,10 @@ type Props = {
 
 const TaskMenu = ({ id, title }: Props) => {
   const [action, setAction] = useState("");
+  const [open, setOpen] = useState(false);
 
   return (
-    <Dialog>
+    <Dialog open={open} onOpenChange={setOpen}>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant={"ghost"} size={"icon"}>
@@ -56,7 +57,9 @@ const TaskMenu = ({ id, title }: Props) => {
           </DialogTrigger>
         </DropdownMenuContent>
       </DropdownMenu>
-      {action === "deleteTask" ? <DeleteTask id={id} title={title}/> : null}
+      {action === "deleteTask" ? (
+        <DeleteTask id={id} title={title} setOpen={setOpen} />
+      ) : null}
     </Dialog>
   );
 };
