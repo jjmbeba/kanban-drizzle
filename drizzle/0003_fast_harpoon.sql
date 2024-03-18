@@ -1,0 +1,1 @@
+ALTER TABLE "sub_tasks" ADD COLUMN "done" boolean;

@@ -22,6 +22,20 @@
       "when": 1710717538444,
       "tag": "0002_clean_slipstream",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1710720247160,
+      "tag": "0003_fast_harpoon",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "5",
+      "when": 1710720261749,
+      "tag": "0004_flat_rumiko_fujikawa",
+      "breakpoints": true
     }
   ]
 }

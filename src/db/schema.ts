@@ -7,6 +7,7 @@ import {
   pgSchema,
   timestamp,
   index,
+  boolean,
 } from "drizzle-orm/pg-core";
 
 export const boards = pgTable(
@@ -96,6 +97,7 @@ export const sub_tasks = pgTable(
       })
       .notNull(),
     name: text("name").notNull(),
+    done:boolean("done").default(false),
     createdAt: timestamp("created_at").defaultNow(),
   },
   (table) => {
