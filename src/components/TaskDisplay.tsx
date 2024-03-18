@@ -44,6 +44,8 @@ const TaskDisplay = () => {
     state.setAvailableColumns,
   ]);
 
+  
+  
   const { data: boardColumns, isLoading } = useQuery({
     queryKey: ["board_columns"],
     queryFn: async () => {
@@ -58,22 +60,24 @@ const TaskDisplay = () => {
     },
     initialData: [],
   });
-
+  
+  useEffect(() => {
+   if(!isLoading){
+     const availableColumns = boardColumns.map(({ id, name }) => {
+       return {
+         id,
+         name,
+       };
+     });
+     setAvailableColumns(availableColumns);
+   }
+  }, [setAvailableColumns, boardColumns, isLoading]);
+  
   if (isLoading) {
     return <TaskDisplaySkeleton />;
   } else if (!boardColumns) {
     return <div className="">Add new board</div>;
   }
-
-  useEffect(() => {
-    const availableColumns = boardColumns.map(({ id, name }) => {
-      return {
-        id,
-        name,
-      };
-    });
-    setAvailableColumns(availableColumns);
-  }, [setAvailableColumns, boardColumns]);
 
   return (
     <ScrollArea className="w-80 md:w-full whitespace-nowrap">

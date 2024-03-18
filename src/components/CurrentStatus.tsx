@@ -54,6 +54,7 @@ const CurrentStatus = ({ column_id, task_id }: Props) => {
       <SelectContent className="rounded-[0.25rem]">
         {availableColumns?.map(({ id, name }) => (
           <SelectItem
+            key={id}
             className="rounded-[0.25rem] flex items-center"
             value={id.toString()}
             disabled={editStatusPending}
