@@ -35,6 +35,7 @@ const SubtasksList = ({ subTasks, doneSubtasks }: Props) => {
 
   const onChange = (checked: CheckedState, id: Number) => {
     changeDoneStatus([checked, id]);
+    setCompletion(checked);
   };
 
   return (
@@ -44,7 +45,6 @@ const SubtasksList = ({ subTasks, doneSubtasks }: Props) => {
       </h3>
       <div className="mt-[1.1875rem]">
         {subTasks.map(({ id, name, done }) => {
-          setCompletion(done);
           return (
             <div
               key={id}
