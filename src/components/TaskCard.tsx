@@ -34,9 +34,9 @@ const TaskCard = ({ id, title, sub_tasks, description, column_id }: Props) => {
       </DialogTrigger>
       <DialogContent className="rounded-[0.375rem] max-w-[21.4375rem] border-none outline-none">
         <DialogHeader className="text-left">
-          <DialogTitle className="heading-lg flex items-center justify-between">
+          <DialogTitle className="heading-lg flex items-center justify-between w-full">
             {title}
-           <TaskMenu/>
+           <TaskMenu id={id} title={title}/>
           </DialogTitle>
           <DialogDescription>
             <p className="body-lg">{description}</p>

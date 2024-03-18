@@ -65,7 +65,7 @@ const SubtasksList = ({ subTasks, doneSubtasks }: Props) => {
                   />
                 )}
               </AnimatePresence>
-              <p className={`body-lg ${completion && "line-through"}`}>
+              <p className={`body-lg ${completion || done && "line-through"}`}>
                 {name}
               </p>
             </div>
