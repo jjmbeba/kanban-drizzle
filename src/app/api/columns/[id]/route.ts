@@ -14,7 +14,11 @@ export async function GET(
       where: (board_columns, { eq }) =>
         eq(board_columns.board_id, parseInt(boardID)),
       with: {
-        tasks: true,
+        tasks: {
+          with: {
+            sub_tasks: true,
+          },
+        },
       },
     });
 
@@ -30,6 +34,8 @@ export async function GET(
         }
       );
     }
+
+    console.log(boardColumns[0].tasks[0].sub_tasks);
 
     return NextResponse.json({
       boardColumns,

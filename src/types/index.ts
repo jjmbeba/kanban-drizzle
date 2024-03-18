@@ -14,15 +14,22 @@ export type BoardColumn = {
 };
 
 export type BoardColumnsWithTasks = {
-  name: string;
   id: number;
+  name: string;
   createdAt: Date | null;
   board_id: number;
   tasks: {
-    title: string;
     id: number;
     createdAt: Date | null;
+    description: string | null;
     column_id: number;
+    title: string;
+    sub_tasks: {
+      id: number;
+      task_id: number;
+      name:string;
+      createdAt: Date | null;
+    }[];
   }[];
 }[];
 
