@@ -55,14 +55,16 @@ const CurrentStatus = ({ column_id, task_id }: Props) => {
         {availableColumns?.map(({ id, name }) => (
           <SelectItem
             key={id}
-            className="rounded-[0.25rem] flex items-center"
+            className="rounded-[0.25rem]"
             value={id.toString()}
             disabled={editStatusPending}
           >
-            {editStatusPending && (
-              <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-            )}
-            {name}
+            <div className="flex items-center">
+              {editStatusPending && (
+                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+              )}
+              {name}
+            </div>
           </SelectItem>
         ))}
       </SelectContent>
