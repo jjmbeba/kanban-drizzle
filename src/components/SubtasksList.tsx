@@ -14,6 +14,7 @@ type Props = {
 
 const SubtasksList = ({ subTasks, doneSubtasks }: Props) => {
   const queryClient = useQueryClient();
+  const [completion, setCompletion] = useState<CheckedState>(false);
 
   const { mutate: changeDoneStatus, isPending: statusPending } = useMutation({
     mutationKey: ["tasks"],
@@ -43,8 +44,7 @@ const SubtasksList = ({ subTasks, doneSubtasks }: Props) => {
       </h3>
       <div className="mt-[1.1875rem]">
         {subTasks.map(({ id, name, done }) => {
-          const [completion, setCompletion] = useState<CheckedState>(done);
-
+          setCompletion(done);
           return (
             <div
               key={id}
