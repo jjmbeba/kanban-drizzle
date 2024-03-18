@@ -14,7 +14,9 @@ type Props = {
 
 const SubtasksList = ({ subTasks, doneSubtasks }: Props) => {
   const queryClient = useQueryClient();
-  const [completion, setCompletion] = useState<CheckedState | undefined>(undefined);
+  const [completion, setCompletion] = useState<CheckedState | undefined>(
+    undefined
+  );
 
   const { mutate: changeDoneStatus, isPending: statusPending } = useMutation({
     mutationKey: ["tasks"],
@@ -59,13 +61,17 @@ const SubtasksList = ({ subTasks, doneSubtasks }: Props) => {
                       onChange(checked, id);
                       setCompletion(checked);
                     }}
-                    defaultChecked={completion === undefined ? done : completion}
+                    defaultChecked={
+                      completion === undefined ? done : completion
+                    }
                     className="rounded-[0.125rem]"
                     disabled={statusPending}
                   />
                 )}
               </AnimatePresence>
-              <p className={`body-lg ${completion || done && "line-through"}`}>
+              <p
+                className={`body-lg ${completion || (done && "line-through")}`}
+              >
                 {name}
               </p>
             </div>

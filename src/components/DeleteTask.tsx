@@ -40,14 +40,16 @@ const DeleteTask = ({ id, title, setOpen }: Props) => {
   });
 
   return (
-    <DialogContent className="max-w-[21.4375rem] rounded-[0.375rem] border-none outline-none">
+    <DialogContent className="max-w-[21.4375rem] md:max-w-[30rem] rounded-[0.375rem] md:rounded-[0.375rem] border-none outline-none">
       <DialogHeader>
         <DialogTitle className="text-left heading-lg text-destructive">
           Delete this task?
         </DialogTitle>
         <DialogDescription className="body-lg text-[#828FA3]">
-          Are you sure you want to delete the &apos;{title}&apos; task and its
-          subtasks? This action cannot be reversed.
+          <p className=" my-[1rem]">
+            Are you sure you want to delete the &apos;{title}&apos; task and its
+            subtasks? This action cannot be reversed.
+          </p>
         </DialogDescription>
       </DialogHeader>
       <DialogFooter className="flex flex-col items-center gap-4">
