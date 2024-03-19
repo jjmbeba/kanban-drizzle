@@ -39,6 +39,7 @@ export const board_columns = pgTable(
       })
       .notNull(),
     name: text("name").notNull(),
+    color:text('color'),
     createdAt: timestamp("created_at").defaultNow(),
   },
   (table) => {

@@ -59,12 +59,6 @@ const TaskDisplay = () => {
     initialData: [],
   });
 
-  if (isLoading) {
-    return <TaskDisplaySkeleton />;
-  } else if (!boardColumns) {
-    return <div className="">Add new board</div>;
-  }
-
   useEffect(() => {
     if (!isLoading) {
       const availableColumns = boardColumns.map(({ id, name }) => {
@@ -76,6 +70,11 @@ const TaskDisplay = () => {
       setAvailableColumns(availableColumns);
     }
   }, [setAvailableColumns, boardColumns, isLoading]);
+  if (isLoading) {
+    return <TaskDisplaySkeleton />;
+  } else if (!boardColumns) {
+    return <div className="">Add new board</div>;
+  }
 
   return (
     <ScrollArea className="w-80 md:w-full whitespace-nowrap">
