@@ -16,15 +16,45 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Task } from "@/types";
-import { X } from "lucide-react";
+import { Loader2, X } from "lucide-react";
 import { useFieldArray } from "react-hook-form";
 import { z } from "zod";
 import { Textarea } from "../ui/textarea";
 import { useZodForm } from "./AddBoardForm";
 import { addTaskSchema } from "./AddTaskForm";
 import { useSidebarStore } from "@/store/sidebarStore";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
+import { toast } from "sonner";
 
 interface Props extends Task {}
+
+export const editTaskSchema = z.object({
+  id: z.number().min(1, {
+    message: "ID is required",
+  }),
+  title: z.string().min(2, {
+    message: "Title must be at least 2 characters long",
+  }),
+  description: z.string().min(5, {
+    message: "Description must be at least 5 characters",
+  }),
+  column_id: z
+    .string({
+      required_error: "Status is required",
+    })
+    .min(1, {
+      message: "Status is required",
+    }),
+  subtasks: z
+    .object({
+      id:z.number().optional(),
+      name: z.string().min(1, {
+        message: "Subtask title is required",
+      }),
+    })
+    .array(),
+});
 
 const EditTaskForm = ({
   id,
@@ -34,11 +64,13 @@ const EditTaskForm = ({
   sub_tasks,
 }: Props) => {
   const [activeBoard] = useSidebarStore((state) => [state.activeBoard]);
+  const queryClient = useQueryClient();
 
   const form = useZodForm({
-    schema: addTaskSchema,
+    schema: editTaskSchema,
 
     defaultValues: {
+      id,
       title,
       column_id: column_id.toString(),
       description,
@@ -53,8 +85,25 @@ const EditTaskForm = ({
     name: "subtasks",
   });
 
+  const { mutate: editTask, isPending: editTaskPending } = useMutation({
+    mutationKey: ["tasks"],
+    mutationFn: async (values: z.infer<typeof addTaskSchema>) => {
+      return await axios
+        .patch(`/api/tasks/${id}`, values)
+        .then((res) => {
+          toast.success(res.data.message);
+        })
+        .catch((err) => console.log(err));
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ["board_columns"],
+      });
+    },
+  });
+
   function onSubmit(values: z.infer<typeof addTaskSchema>) {
-    console.log(values);
+    editTask(values);
   }
 
   return (
@@ -170,8 +219,8 @@ const EditTaskForm = ({
             </FormItem>
           )}
         />
-        <Button className="w-full" type="submit">
-          {/* {addTaskPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />} */}
+        <Button className="w-full" type="submit" disabled={editTaskPending}>
+          {editTaskPending && <Loader2 className="w-4 h-4 animate-spin mr-2" />}
           Edit Task
         </Button>
       </form>

@@ -17,10 +17,12 @@ const SubtasksList = ({ subTasks, doneSubtasks }: Props) => {
   const [completion, setCompletion] = useState<CheckedState | undefined>(
     undefined
   );
+  const [active, setActive] = useState<Number | null>(null);
 
   const { mutate: changeDoneStatus, isPending: statusPending } = useMutation({
     mutationKey: ["tasks"],
     mutationFn: async ([state, id]: [CheckedState, Number]) => {
+      setActive(id);
       return await axios
         .patch(`/api/sub-tasks/${id}`, {
           done: state,
@@ -29,6 +31,7 @@ const SubtasksList = ({ subTasks, doneSubtasks }: Props) => {
         .catch((err) => console.log(err));
     },
     onSuccess: () => {
+      setActive(null);
       queryClient.invalidateQueries({
         queryKey: ["board_columns"],
       });
@@ -45,7 +48,7 @@ const SubtasksList = ({ subTasks, doneSubtasks }: Props) => {
       <h3 className="body-md">
         Subtasks({doneSubtasks.toString()} of {subTasks.length})
       </h3>
-      <div className="mt-[1.1875rem]">
+      <div className="mt-[1.1875rem] flex flex-col gap-2">
         {subTasks.map(({ id, name, done }) => {
           return (
             <div
@@ -53,7 +56,7 @@ const SubtasksList = ({ subTasks, doneSubtasks }: Props) => {
               className="flex items-center gap-[0.875rem] bg-background pl-[0.8125rem] py-[1.1875rem] rounded-[0.25rem]"
             >
               <AnimatePresence>
-                {statusPending ? (
+                {statusPending && active === id ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
                   <Checkbox

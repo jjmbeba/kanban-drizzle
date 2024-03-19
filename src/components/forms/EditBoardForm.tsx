@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { useSidebarStore } from "@/store/sidebarStore";
+import { UpdatedBoard } from "@/types";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Loader2, X } from "lucide-react";
@@ -18,7 +19,6 @@ import { useFieldArray } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useZodForm } from "./AddBoardForm";
-import { UpdatedBoard } from "@/types";
 
 export const editBoardSchema = z.object({
   id: z.number().min(1, {

@@ -29,7 +29,7 @@ const CurrentStatus = ({ column_id, task_id }: Props) => {
     mutationKey: ["tasks"],
     mutationFn: async (column_id: string) => {
       return await axios
-        .patch(`/api/tasks/${task_id}`, { column_id: parseInt(column_id) })
+        .patch(`/api/edit-task/${task_id}`, { column_id: parseInt(column_id) })
         .then((res) => {
           toast.success(res.data.message);
         })
