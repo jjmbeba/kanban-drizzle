@@ -18,6 +18,13 @@ import { Loader2, X } from "lucide-react";
 import { UseFormProps, useFieldArray, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
+import { HexColorPicker } from "react-colorful";
+import { useState } from "react";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
 
 export const addBoardSchema = z.object({
   name: z.string().min(2, {
@@ -28,6 +35,7 @@ export const addBoardSchema = z.object({
       name: z.string().min(1, {
         message: "Column name is required",
       }),
+      color: z.string(),
     })
     .array(),
 });
@@ -54,6 +62,8 @@ const AddBoardForm = () => {
     state.openNavbarMenu,
     state.setOpenNavbarMenu,
   ]);
+
+  const [colors, setColors] = useState<string[]>();
 
   const form = useZodForm({
     schema: addBoardSchema,
@@ -93,7 +103,14 @@ const AddBoardForm = () => {
   });
 
   function onSubmit(values: z.infer<typeof addBoardSchema>) {
-    addBoard(values);
+    // addBoard(values);
+
+    const newColumns = values.columns.map((column, index) => {
+      return { ...column, color: colors?.[index] || "#aabbcc" };
+    });
+
+    values.columns = newColumns;
+    console.log(values);
   }
 
   return (
@@ -127,13 +144,46 @@ const AddBoardForm = () => {
               <FormLabel>Board Columns</FormLabel>
               <FormControl>
                 <div className="flex items-center gap-3">
+                  <Popover>
+                    <PopoverTrigger>
+                      <div
+                        className="w-[0.9375rem] h-[0.9375rem] rounded-full"
+                        style={{
+                          background: colors?.[index],
+                        }}
+                      />
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <HexColorPicker
+                        color={colors?.[index]}
+                        onChange={(newColor) => {
+                          const newColors = colors?.map((color, colorIndex) => {
+                            if (colorIndex === index) {
+                              return newColor;
+                            } else {
+                              return color;
+                            }
+                          });
+                          setColors(newColors);
+                        }}
+                      />
+                    </PopoverContent>
+                  </Popover>
                   <Input
                     className="input-border"
                     placeholder="e.g. Todo"
                     {...form.register(`columns.${index}.name`)}
                   />
                   <Button
-                    onClick={() => remove(index)}
+                    onClick={() => {
+                      remove(index);
+
+                      const newColors = colors?.filter(
+                        (color, colorIndex) => colorIndex !== index
+                      );
+
+                      setColors(newColors);
+                    }}
                     size={"icon"}
                     variant={"ghost"}
                     type="button"
@@ -154,6 +204,14 @@ const AddBoardForm = () => {
           onClick={() => {
             append({
               name: "",
+              color: "",
+            });
+            setColors((prev) => {
+              if (prev) {
+                return [...prev!, "#aabbcc"];
+              } else {
+                return ["#aabbcc"];
+              }
             });
           }}
           type="button"
