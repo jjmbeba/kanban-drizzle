@@ -1,5 +1,4 @@
 "use client";
-import React from "react";
 import {
   Dialog,
   DialogContent,
@@ -8,16 +7,21 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Button } from "./ui/button";
-import { MoreVertical } from "lucide-react";
-import CurrentStatus from "./CurrentStatus";
 import { Task } from "@/types";
+import CurrentStatus from "./CurrentStatus";
 import SubtasksList from "./SubtasksList";
 import TaskMenu from "./TaskMenu";
 
 interface Props extends Task {}
 
-const TaskCard = ({ id, title, sub_tasks, description, column_id }: Props) => {
+const TaskCard = ({
+  id,
+  title,
+  sub_tasks,
+  description,
+  column_id,
+  createdAt,
+}: Props) => {
   const doneSubtasks = sub_tasks.filter((subtask) => subtask.done).length;
 
   return (
@@ -36,7 +40,14 @@ const TaskCard = ({ id, title, sub_tasks, description, column_id }: Props) => {
         <DialogHeader className="text-left">
           <DialogTitle className="heading-lg flex items-center justify-between w-full">
             {title}
-            <TaskMenu id={id} title={title} />
+            <TaskMenu
+              id={id}
+              title={title}
+              sub_tasks={sub_tasks}
+              description={description}
+              column_id={column_id}
+              createdAt={createdAt}
+            />
           </DialogTitle>
           <DialogDescription>
             <p className="body-lg">{description}</p>

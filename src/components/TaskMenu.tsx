@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
-import { Button } from "./ui/button";
-import { MoreVertical } from "lucide-react";
+import {
+  Dialog,
+  DialogTrigger
+} from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,23 +12,23 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+import { Task } from "@/types";
+import { MoreVertical } from "lucide-react";
+import { useState } from "react";
 import DeleteTask from "./DeleteTask";
+import EditTask from "./EditTask";
+import { Button } from "./ui/button";
 
-type Props = {
-  id: Number;
-  title: String;
-};
+interface Props extends Task {}
 
-const TaskMenu = ({ id, title }: Props) => {
+const TaskMenu = ({
+  id,
+  title,
+  sub_tasks,
+  description,
+  column_id,
+  createdAt,
+}: Props) => {
   const [action, setAction] = useState("");
   const [open, setOpen] = useState(false);
 
@@ -59,6 +60,16 @@ const TaskMenu = ({ id, title }: Props) => {
       </DropdownMenu>
       {action === "deleteTask" ? (
         <DeleteTask id={id} title={title} setOpen={setOpen} />
+      ) : action === "editTask" ? (
+        <EditTask
+          id={id}
+          title={title}
+          sub_tasks={sub_tasks}
+          description={description}
+          column_id={column_id}
+          createdAt={createdAt}
+          setOpen={setOpen}
+        />
       ) : null}
     </Dialog>
   );
