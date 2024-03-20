@@ -34,6 +34,7 @@ export type BoardColumn = {
   name: string | null;
   createdAt: Date | null;
   board_id: number | null;
+  color:string;
 };
 
 export type BoardColumnsWithTasks = {
@@ -67,6 +68,7 @@ export type UpdatedBoard = {
   board_columns: {
     id: number;
     name: string;
+    color:string;
     createdAt: Date | null;
     board_id: number;
   }[];

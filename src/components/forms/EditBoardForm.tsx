@@ -19,6 +19,9 @@ import { useFieldArray } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
 import { useZodForm } from "./AddBoardForm";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { HexColorPicker } from "react-colorful";
+import { useState } from "react";
 
 export const editBoardSchema = z.object({
   id: z.number().min(1, {
@@ -33,6 +36,7 @@ export const editBoardSchema = z.object({
       name: z.string().min(1, {
         message: "Column name is required",
       }),
+      color: z.string(),
     })
     .array(),
 });
@@ -58,24 +62,33 @@ const EditBoardForm = () => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ["boards"],
+        queryKey: ["boards", "board_columns"],
+        refetchType: "all",
       });
     },
   });
 
-  const board_columns = activeBoard?.board_columns?.map(({ id, name }) => {
-    if (id && name) {
-      return {
-        id,
-        name,
-      };
-    } else {
-      return {
-        id: undefined,
-        name: undefined,
-      };
+  const board_columns = activeBoard?.board_columns?.map(
+    ({ id, name, color }) => {
+      if (id && name) {
+        return {
+          id,
+          name,
+          color,
+        };
+      } else {
+        return {
+          id: undefined,
+          name: undefined,
+          color: undefined,
+        };
+      }
     }
-  });
+  );
+
+  const [colors, setColors] = useState(
+    activeBoard?.board_columns.map((column) => column.color)
+  );
 
   const form = useZodForm({
     schema: editBoardSchema,
@@ -95,6 +108,11 @@ const EditBoardForm = () => {
   });
 
   function onSubmit(values: z.infer<typeof editBoardSchema>) {
+    const newColumns = values.columns.map((column, index) => {
+      return { ...column, color: colors?.[index] || "#aabbcc" };
+    });
+
+    values.columns = newColumns;
     editBoard(values);
   }
 
@@ -146,13 +164,45 @@ const EditBoardForm = () => {
               <FormLabel>Board Columns</FormLabel>
               <FormControl>
                 <div className="flex items-center gap-3">
+                  <Popover>
+                    <PopoverTrigger>
+                      <div
+                        className="w-[0.9375rem] h-[0.9375rem] rounded-full"
+                        style={{
+                          background: colors?.[index],
+                        }}
+                      />
+                    </PopoverTrigger>
+                    <PopoverContent>
+                      <HexColorPicker
+                        color={colors?.[index]}
+                        onChange={(newColor) => {
+                          const newColors = colors?.map((color, colorIndex) => {
+                            if (colorIndex === index) {
+                              return newColor;
+                            } else {
+                              return color;
+                            }
+                          });
+                          setColors(newColors);
+                        }}
+                      />
+                    </PopoverContent>
+                  </Popover>
                   <Input
                     className="input-border"
                     placeholder="e.g. Todo"
                     {...form.register(`columns.${index}.name`)}
                   />
                   <Button
-                    onClick={() => remove(index)}
+                    onClick={() => {
+                      remove(index);
+                      const newColors = colors?.filter(
+                        (color, colorIndex) => colorIndex !== index
+                      );
+
+                      setColors(newColors);
+                    }}
                     size={"icon"}
                     variant={"ghost"}
                     type="button"
@@ -173,6 +223,14 @@ const EditBoardForm = () => {
           onClick={() => {
             append({
               name: "",
+              color: "",
+            });
+            setColors((prev) => {
+              if (prev) {
+                return [...prev!, "#aabbcc"];
+              } else {
+                return ["#aabbcc"];
+              }
             });
           }}
           type="button"

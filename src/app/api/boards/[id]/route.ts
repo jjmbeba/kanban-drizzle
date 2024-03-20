@@ -36,7 +36,7 @@ export async function PATCH(
       const existingColumns = await tx
         .select()
         .from(board_columns)
-        .where(eq(board_columns.board_id,  updatedBoard[0].id ));
+        .where(eq(board_columns.board_id, updatedBoard[0].id));
 
       // Delete columns that are not present in the request
       const deletePromises = existingColumns
@@ -45,29 +45,30 @@ export async function PATCH(
             !req.columns.find((reqColumn) => reqColumn.id === column.id)
         )
         .map(async (column) => {
-          await tx.delete(board_columns).where(eq(board_columns.id , column.id ));
+          await tx.delete(board_columns).where(eq(board_columns.id, column.id));
         });
 
       await Promise.all(deletePromises);
 
       const columns = await Promise.all(
-        req.columns?.map(async ({ id, name }) => {
+        req.columns?.map(async ({ id, name, color }) => {
           if (id) {
             const updatedColumn = await tx
               .update(board_columns)
               .set({
                 name,
+                color,
               })
               .where(eq(board_columns.id, id))
               .returning();
-
             return updatedColumn[0];
           } else {
             const new_board_column = await tx
               .insert(board_columns)
               .values({
-                name: name,
+                name,
                 board_id: updatedBoard[0].id,
+                color,
               })
               .returning();
             return new_board_column[0];
@@ -79,10 +80,9 @@ export async function PATCH(
     });
 
     return NextResponse.json({
-      message:`${updatedBoard.name} updated successfully`,
-      updatedBoard
-    })
-    
+      message: `${updatedBoard.name} updated successfully`,
+      updatedBoard,
+    });
   } catch (error) {
     console.log(error);
     return NextResponse.json(

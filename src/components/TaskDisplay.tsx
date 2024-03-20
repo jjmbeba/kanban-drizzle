@@ -77,10 +77,12 @@ const TaskDisplay = () => {
   }
 
   return (
-    <ScrollArea className="w-80 md:w-full whitespace-nowrap">
+    <ScrollArea className="w-80 md:w-[77dvw] whitespace-nowrap">
       <div className="flex w-max space-x-[1.4375rem] px-4 my-6 *:w-[15.5rem] md:*:w-[19.5rem]">
         {boardColumns.map(({ name, id, tasks, color }) => {
-          return <ColumnDisplay key={id} name={name} tasks={tasks} color={color} />;
+          return (
+            <ColumnDisplay key={id} name={name} tasks={tasks} color={color} />
+          );
         })}
       </div>
       <ScrollBar orientation="horizontal" />
