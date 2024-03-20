@@ -3,6 +3,7 @@ import TaskCard from "./TaskCard";
 
 type Props = {
   name: string;
+  color: string;
   tasks: {
     title: string;
     id: number;
@@ -19,11 +20,14 @@ type Props = {
   }[];
 };
 
-const ColumnDisplay = ({ name, tasks }: Props) => {
+const ColumnDisplay = ({ name, tasks, color }: Props) => {
   return (
     <div>
       <div className="flex items-center gap-[0.625rem]">
-        <div className="w-[0.9375rem] h-[0.9375rem] rounded-full bg-[#49C4E5]" />
+        <div
+          style={{ backgroundColor: color }}
+          className="w-[0.9375rem] h-[0.9375rem] rounded-full"
+        />
         <p className="heading-sm text-muted-foreground">
           {name.toUpperCase()} ({tasks.length})
         </p>

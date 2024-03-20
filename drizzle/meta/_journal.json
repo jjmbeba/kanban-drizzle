@@ -50,6 +50,20 @@
       "when": 1710889639383,
       "tag": "0006_cynical_carlie_cooper",
       "breakpoints": true
+    },
+    {
+      "idx": 7,
+      "version": "5",
+      "when": 1710960939383,
+      "tag": "0007_third_rockslide",
+      "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1710961072073,
+      "tag": "0008_clear_roughhouse",
+      "breakpoints": true
     }
   ]
 }

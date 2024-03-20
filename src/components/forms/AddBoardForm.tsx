@@ -103,14 +103,12 @@ const AddBoardForm = () => {
   });
 
   function onSubmit(values: z.infer<typeof addBoardSchema>) {
-    // addBoard(values);
-
     const newColumns = values.columns.map((column, index) => {
       return { ...column, color: colors?.[index] || "#aabbcc" };
     });
 
     values.columns = newColumns;
-    console.log(values);
+    addBoard(values);
   }
 
   return (

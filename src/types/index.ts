@@ -41,6 +41,7 @@ export type BoardColumnsWithTasks = {
   name: string;
   createdAt: Date | null;
   board_id: number;
+  color:string;
   tasks: {
     id: number;
     createdAt: Date | null;

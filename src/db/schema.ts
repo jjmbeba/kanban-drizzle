@@ -36,10 +36,11 @@ export const board_columns = pgTable(
     board_id: integer("board_id")
       .references(() => boards.id, {
         onDelete: "cascade",
+        onUpdate:"cascade"
       })
       .notNull(),
     name: text("name").notNull(),
-    color:text('color'),
+    color:text('color').notNull(),
     createdAt: timestamp("created_at").defaultNow(),
   },
   (table) => {
@@ -67,6 +68,7 @@ export const tasks = pgTable(
     column_id: integer("column_id")
       .references(() => board_columns.id, {
         onDelete: "cascade",
+        onUpdate: "cascade",
       })
       .notNull(),
     title: text("title").notNull(),
@@ -95,10 +97,11 @@ export const sub_tasks = pgTable(
     task_id: integer("task_id")
       .references(() => tasks.id, {
         onDelete: "cascade",
+        onUpdate: "cascade",
       })
       .notNull(),
     name: text("name").notNull(),
-    done:boolean("done").default(false),
+    done: boolean("done").default(false),
     createdAt: timestamp("created_at").defaultNow(),
   },
   (table) => {

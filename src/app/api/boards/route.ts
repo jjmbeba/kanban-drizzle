@@ -46,6 +46,7 @@ export async function POST(request: NextRequest) {
           return {
             name: column.name,
             board_id: result[0].id,
+            color:column.color
           };
         });
 

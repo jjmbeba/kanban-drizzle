@@ -1,0 +1,1 @@
+ALTER TABLE "board_columns" ALTER COLUMN "color" SET NOT NULL;
