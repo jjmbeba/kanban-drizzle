@@ -61,10 +61,11 @@ const TaskDisplay = () => {
 
   useEffect(() => {
     if (!isLoading) {
-      const availableColumns = boardColumns.map(({ id, name }) => {
+      const availableColumns = boardColumns.map(({ id, name, color }) => {
         return {
           id,
           name,
+          color
         };
       });
       setAvailableColumns(availableColumns);
